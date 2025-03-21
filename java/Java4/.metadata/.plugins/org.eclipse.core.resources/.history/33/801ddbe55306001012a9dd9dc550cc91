@@ -1,0 +1,9 @@
+package ejercicio32;
+
+public class persona {
+
+	public persona() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

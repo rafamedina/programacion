@@ -1,0 +1,10 @@
+package paquetes;
+import paquetes.Persona;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+	}
+
+}

@@ -1,0 +1,9 @@
+package paquetes;
+
+public class Persona1 {
+
+	public Persona1() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
