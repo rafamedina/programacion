@@ -1,9 +1,8 @@
-
+package Controlador;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Controlador controlador = new Controlador();
+		ControladorMenu controlador = new ControladorMenu();
 		controlador.menuPrincipal();
 		
 	}

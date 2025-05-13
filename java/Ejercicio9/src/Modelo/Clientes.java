@@ -1,3 +1,4 @@
+package Modelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -5,21 +6,7 @@ import java.sql.SQLException;
 
 public class Clientes {
 
-    private int idCliente;
-    private String nombre;
-    private String email;
-    private String telefono;
-
-    // Constructor vacío
-    public Clientes() {}
-
     // Constructor con parámetros
-    public Clientes(String nombre, String email, String telefono) {
-        this.nombre = nombre;
-        this.email = email;
-        this.telefono = telefono;
-    }
-
     // Método para buscar si el cliente ya existe por email
     public boolean buscarCliente(String email) {
         Connection conexion = Conexion.conectar();
@@ -143,7 +130,7 @@ public class Clientes {
     }
 
     // Método para editar un cliente
-    public boolean editarCliente(String nombre, String telefono, String email) {
+    public boolean editarCliente(String nombre, String email, String telefono) {
         if (!buscarCliente(email)) {
             return false;  // Cliente no encontrado
         }

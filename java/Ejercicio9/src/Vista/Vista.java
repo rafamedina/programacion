@@ -1,3 +1,4 @@
+package Vista;
 import java.util.Scanner;
 
 public class Vista {
@@ -23,18 +24,23 @@ public class Vista {
         return obtenerOpcion();
     }
 
-    public int menuClientes() {
-        System.out.println("----- MENÚ CLIENTES -----");
-        System.out.println("1 – AÑADIR CLIENTES");
-        System.out.println("2 – LISTAR CLIENTES");
-        System.out.println("3 – EDITAR CLIENTES");
-        System.out.println("4 – ELIMINAR CLIENTES");
+    public int menuOperaciones() {
+        System.out.println("----- MENÚ -----");
+        System.out.println("1 – AÑADIR");
+        System.out.println("2 – LISTAR");
+        System.out.println("3 – EDITAR");
+        System.out.println("4 – ELIMINAR");
         System.out.println("5 – SALIR");
         return obtenerOpcion();
     }
 
     public String obtenerCorreo() {
         System.out.print("Introduce el correo del cliente: ");
+        return scanner.nextLine();
+    }
+    
+    public String obtenerCif() {
+        System.out.print("Introduce el cif del proveedor: ");
         return scanner.nextLine();
     }
 
@@ -47,16 +53,28 @@ public class Vista {
         String telefono = scanner.nextLine();
         return new String[]{nombre, email, telefono};
     }
-
+    
+    public String[] obtenerDatosProveedor() {
+        System.out.print("Introduce el nombre del Proveedor: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Introduce el cif del Proveedor: ");
+        String cif = scanner.nextLine();
+        System.out.print("Introduce el teléfono del Proveedor: ");
+        String telefono = scanner.nextLine();
+        return new String[]{nombre, cif, telefono};
+    }
+   
     public int obtenerOpcion() {
         int opcion;
         while (!scanner.hasNextInt()) {
-            scanner.next();  // Limpiar buffer
+            scanner.next(); 
             mostrarMensaje("Por favor, ingrese un número válido.");
         }
         opcion = scanner.nextInt();
-        scanner.nextLine();  // Limpiar buffer
+        scanner.nextLine(); 
         return opcion;
     }
+    
+    
 }
 
