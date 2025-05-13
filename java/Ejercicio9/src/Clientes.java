@@ -4,179 +4,175 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Clientes {
-    int idCliente;
-	String nombre;
-    String email;
-    int telefono;
-    // Constructor
-    public Clientes(String nombre, String email, int telefono) {
+
+    private int idCliente;
+    private String nombre;
+    private String email;
+    private String telefono;
+
+    // Constructor vacío
+    public Clientes() {}
+
+    // Constructor con parámetros
+    public Clientes(String nombre, String email, String telefono) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+    }
+
+    // Método para buscar si el cliente ya existe por email
+    public boolean buscarCliente(String email) {
+        Connection conexion = Conexion.conectar();
+        PreparedStatement psSelect = null;
+        ResultSet rs = null;
+
         try {
-            this.nombre = nombre;
-            this.email = email;
-            this.telefono = telefono;
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            if (conexion != null) {
+                String query = "SELECT * FROM Clientes WHERE email=?";
+                psSelect = conexion.prepareStatement(query);
+                psSelect.setString(1, email);
+                rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    return true;  // Cliente encontrado
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (psSelect != null) psSelect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;  // Cliente no encontrado
+    }
+
+    // Método para insertar un cliente
+    public boolean insertarCliente(String nombre, String email, String telefono) {
+        if (buscarCliente(email)) {
+            return false; // El cliente ya existe
+        }
+
+        Connection conexion = Conexion.conectar();
+        PreparedStatement psInsert = null;
+
+        try {
+            if (conexion != null) {
+                String query = "INSERT INTO Clientes (nombre, email, telefono) VALUES (?, ?, ?)";
+                psInsert = conexion.prepareStatement(query);
+                psInsert.setString(1, nombre);
+                psInsert.setString(2, email);
+                psInsert.setString(3, telefono);
+                psInsert.executeUpdate();
+                return true; // Cliente insertado correctamente
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (psInsert != null) psInsert.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;  // Error al insertar el cliente
+    }
+
+    // Método para mostrar todos los clientes
+    public void mostrarClientes() {
+        Connection conexion = Conexion.conectar();
+        PreparedStatement psSelect = null;
+        ResultSet rs = null;
+
+        try {
+            if (conexion != null) {
+                String query = "SELECT * FROM Clientes";
+                psSelect = conexion.prepareStatement(query);
+                rs = psSelect.executeQuery();
+
+                while (rs.next()) {
+                    System.out.printf("%-10s %-25s %-20s %-15s\n",
+                            rs.getInt("id_cliente"),
+                            rs.getString("nombre"),
+                            rs.getString("email"),
+                            rs.getString("telefono"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (psSelect != null) psSelect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    // Método para buscar si el cliente ya existe
-    public boolean buscarCliente( String email) {
-        Connection conexion = null;
-        PreparedStatement psSelect = null;
-        ResultSet rs = null;
+    // Método para eliminar un cliente por email
+    public boolean eliminarCliente(String email) {
+        if (!buscarCliente(email)) {
+            return false;  // Cliente no encontrado
+        }
 
-        try {
-            conexion = Conexion.conectar();  // Conectar a la base de datos
-            if (conexion != null) {
-                String select = "SELECT * FROM Clientes WHERE email=?";
-                psSelect = conexion.prepareStatement(select);
-                psSelect.setString(1, email);  // Establecer el parámetro de la consulta
-
-                rs = psSelect.executeQuery();  // Ejecutar la consulta
-
-                if (rs.next()) {
-                    return true;  // Si el cliente existe, devolver true
-                } else {
-                    return false;  // Si no existe, devolver false
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("ERROR AL BUSCAR CLIENTE: " + e.getMessage());
-        } 
-        return false;
-    }
-
-
-    // Método para insertar un nuevo cliente
-    public boolean insertarClientes(String nombre, String email, int telefono) {
-        Connection conexion = null;
-        PreparedStatement psInsert = null;
-
-        try {
-            conexion = Conexion.conectar();  // Conectar a la base de datos
-            if (conexion != null) {
-                // Verificar si el cliente ya existe
-                if (buscarCliente(email)) {
-                    System.out.println("El cliente ya existe, no se puede insertar.");
-                    return false;
-                }
-
-                // Si no existe, proceder con la inserción
-                String insert = "INSERT INTO Clientes (nombre, email, telefono) VALUES (?, ?, ?)";
-                psInsert = conexion.prepareStatement(insert);
-                psInsert.setString(1, nombre);
-                psInsert.setString(2, email);
-                psInsert.setInt(3, telefono);
-
-                psInsert.executeUpdate();
-                System.out.println("CLIENTE AÑADIDO CORRECTAMENTE.");
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("ERROR AL AÑADIR CLIENTE: " + e.getMessage());
-        } 
-        return false;
-    }
-    
-    public void mostrarClientes() {
-        Connection conexion = null;
-        PreparedStatement psSelect = null;
-        ResultSet rs = null;
-
-        try {
-            conexion = Conexion.conectar();  // Conectar a la base de datos
-            if (conexion != null) {
-                String select = "SELECT * FROM Clientes";  // Consulta SQL
-
-                // Preparar y ejecutar la consulta
-                psSelect = conexion.prepareStatement(select);
-                rs = psSelect.executeQuery();
-
-                // Imprimir cabecera
-                System.out.printf("%-10s %-25s %-20s %-10s\n", "ID", "NOMBRE", "EMAIL", "TELEFONO");
-                System.out.println("----------------------------------------------------------------------------");
-
-                // Recorrer los resultados y mostrarlos
-                while (rs.next()) {
-                    System.out.printf("%-10s %-25s %-20s %-10d\n",
-                            rs.getString("id_cliente"),
-                            rs.getString("nombre"),
-                            rs.getString("email"),
-                            rs.getInt("telefono"));
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("ERROR AL MOSTRAR CLIENTES: " + e.getMessage());
-        } 
-    }
- 
-    
-    public boolean eliminarClientes(String email) {
-        Connection conexion = null;
+        Connection conexion = Conexion.conectar();
         PreparedStatement psDelete = null;
 
         try {
-            conexion = Conexion.conectar();  // Conectar a la base de datos
             if (conexion != null) {
-                // Verificar si el cliente existe por email
-                if (buscarCliente(email)) {  
-                    String delete = "DELETE FROM Clientes WHERE email = ?";
-                    psDelete = conexion.prepareStatement(delete);
-                    psDelete.setString(1, email);
-
-                    psDelete.executeUpdate();  // Ejecutar la eliminación
-                    System.out.println("CLIENTE ELIMINADO CORRECTAMENTE.");
-                    return true;
-                } else {
-                    System.out.println("EL CLIENTE NO EXISTE.");
-                }
+                String query = "DELETE FROM Clientes WHERE email=?";
+                psDelete = conexion.prepareStatement(query);
+                psDelete.setString(1, email);
+                psDelete.executeUpdate();
+                return true; // Cliente eliminado correctamente
             }
         } catch (SQLException e) {
-            System.out.println("ERROR AL ELIMINAR CLIENTE: " + e.getMessage());
-        } 
-        return false;
+            e.printStackTrace();
+        } finally {
+            try {
+                if (psDelete != null) psDelete.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;  // Error al eliminar el cliente
     }
 
-    
-    public boolean editarClientes(String nombre,int telefono, String email ) {
-    	Connection conexion = null;
-        PreparedStatement psInsert = null;
+    // Método para editar un cliente
+    public boolean editarCliente(String nombre, String telefono, String email) {
+        if (!buscarCliente(email)) {
+            return false;  // Cliente no encontrado
+        }
+
+        Connection conexion = Conexion.conectar();
+        PreparedStatement psUpdate = null;
 
         try {
-            conexion = Conexion.conectar();  // Conectar a la base de datos
             if (conexion != null) {
-                // Verificar si el cliente ya existe
-                if (buscarCliente(email)) {
-                	String update = "UPDATE Clientes SET nombre = ?, telefono = ? WHERE email = ?";
-                	PreparedStatement psUpdate = conexion.prepareStatement(update);
-                	psUpdate.setString(1, nombre);
-                	psUpdate.setInt(2, telefono);
-                	psUpdate.setString(3, email);
-
-                	psUpdate.executeUpdate();
-                	System.out.println("CLIENTE ACTUALIZADO CORRECTAMENTE.");
-
-                    return true;
-                } else {                	
-                	System.out.println("EL CLIENTE NO EXISTE");
-                	return false;           	
-                }
-        
+                String query = "UPDATE Clientes SET nombre=?, telefono=? WHERE email=?";
+                psUpdate = conexion.prepareStatement(query);
+                psUpdate.setString(1, nombre);
+                psUpdate.setString(2, telefono);
+                psUpdate.setString(3, email);
+                psUpdate.executeUpdate();
+                return true; // Cliente actualizado correctamente
             }
         } catch (SQLException e) {
-            System.out.println("ERROR AL AÑADIR CLIENTE: " + e.getMessage());
-        } 
-        return false;
+            e.printStackTrace();
+        } finally {
+            try {
+                if (psUpdate != null) psUpdate.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;  // Error al actualizar el cliente
     }
-    
-   }
-
-
-
-
-
-
-
+}
 
 
 

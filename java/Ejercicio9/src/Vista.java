@@ -1,95 +1,62 @@
 import java.util.Scanner;
-import java.sql.Connection;
 
 public class Vista {
-    Scanner scanner = new Scanner(System.in);
-    Connection conexion = Conexion.conectar();
 
-    public int eleccion() {
-        int eleccion;
-        System.out.print("SELECCIONA UNA OPCIÓN: ");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Por favor, ingresa un número válido.");
-            scanner.next();  // Limpiar la entrada no válida
-        }
-        eleccion = scanner.nextInt();
-        scanner.nextLine();  // Limpiar el buffer
-        return eleccion;
+    private Scanner scanner;
+
+    public Vista() {
+        this.scanner = new Scanner(System.in);
     }
 
-    public void menuCliente() {
-        Clientes cliente = new Clientes("","",0);
-        int eleccion = 0;
+    public void mostrarMensaje(String mensaje) {
+        System.out.println(mensaje);
+    }
 
-        do {
-            // Menú principal
-            System.out.println("----- MENÚ CLIENTE -----");
-            System.out.println("1 – AÑADIR CLIENTES");
-            System.out.println("2 – LISTAR CLIENTES");
-            System.out.println("3 – EDITAR CLIENTES");
-            System.out.println("4 – ELIMINAR CLIENTES");
-            System.out.println("5 – SALIR");
+    public int menuPrincipal() {
+        System.out.println("----- MENÚ GENERAL -----");
+        System.out.println("1 - MENU CLIENTES");
+        System.out.println("2 - MENU PROVEEDORES");
+        System.out.println("3 - MENU ARTICULOS");
+        System.out.println("4 - MENU VENTAS");
+        System.out.println("5 - MENU FACTURAS");
+        System.out.println("6 - SALIR");
+        return obtenerOpcion();
+    }
 
-            // Solicitar opción
-            eleccion = eleccion();
+    public int menuClientes() {
+        System.out.println("----- MENÚ CLIENTES -----");
+        System.out.println("1 – AÑADIR CLIENTES");
+        System.out.println("2 – LISTAR CLIENTES");
+        System.out.println("3 – EDITAR CLIENTES");
+        System.out.println("4 – ELIMINAR CLIENTES");
+        System.out.println("5 – SALIR");
+        return obtenerOpcion();
+    }
 
-            switch (eleccion) {
-                case 1:
-                    System.out.println("Dime un correo: ");
-                    String correo = scanner.nextLine();
-                    if (!cliente.buscarCliente(correo)) {
-                        System.out.println("Cliente no encontrado. Añadiendo cliente...");
-                        System.out.println("Dame un nombre: ");
-                        String nombre = scanner.nextLine();
-                        System.out.println("Dame un Telefono: ");
-                        int telefono = scanner.nextInt();
-                        scanner.nextLine();  // Limpiar el buffer
-                        cliente.insertarClientes(nombre, correo, telefono);
-                    } else {
-                        System.out.println("El cliente ya existe.");
-                    }
-                    break;
+    public String obtenerCorreo() {
+        System.out.print("Introduce el correo del cliente: ");
+        return scanner.nextLine();
+    }
 
-                case 2:
-                    cliente.mostrarClientes();
-                    break;
+    public String[] obtenerDatosCliente() {
+        System.out.print("Introduce el nombre del cliente: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Introduce el correo del cliente: ");
+        String email = scanner.nextLine();
+        System.out.print("Introduce el teléfono del cliente: ");
+        String telefono = scanner.nextLine();
+        return new String[]{nombre, email, telefono};
+    }
 
-                case 3:
-                    System.out.println("Dime un correo: ");
-                    String correos = scanner.nextLine();
-                    if (cliente.buscarCliente(correos)) {
-                        System.out.println("Dame un nuevo nombre: ");
-                        String nombreNuevo = scanner.nextLine();
-                        System.out.println("Dame un nuevo Telefono: ");
-                        int telefonoNuevo = scanner.nextInt();
-                        scanner.nextLine();  // Limpiar el buffer
-                        cliente.editarClientes(nombreNuevo, telefonoNuevo, correos);
-                    } else {
-                        System.out.println("Cliente no encontrado.");
-                    }
-                    break;
-
-                case 4:
-                    System.out.println("Dime un correo: ");
-                    String email = scanner.nextLine();
-                    if (cliente.buscarCliente(email)) {
-                        cliente.eliminarClientes(email);
-                    } else {
-                        System.out.println("Cliente no encontrado.");
-                    }
-                    break;
-
-                case 5:
-                	eleccion = 5;
-                    System.out.println("SALIENDO...");
-                    break;
-
-                default:
-                    System.out.println("OPCIÓN INVÁLIDA.");
-            }
-
-        } while (eleccion != 5);  // Repite hasta que elija salir
-
-        scanner.close();
+    public int obtenerOpcion() {
+        int opcion;
+        while (!scanner.hasNextInt()) {
+            scanner.next();  // Limpiar buffer
+            mostrarMensaje("Por favor, ingrese un número válido.");
+        }
+        opcion = scanner.nextInt();
+        scanner.nextLine();  // Limpiar buffer
+        return opcion;
     }
 }
+
