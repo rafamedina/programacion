@@ -2,10 +2,16 @@ package Controlador;
 import Modelo.*;
 import Vista.*;
 
-public class ProveedorControlador {
+public class ControllerProveedor {
     private Vista vista;
+    private vistaProveedor vistaP;
     private Proveedores proveedor;
+    public ControllerProveedor() {
+        vista = new Vista();                    // Inicializar vista
+        proveedor = new Proveedores();    // Inicializar proveedor       
+    }
 	public void menuProveedores() {
+	
    	 int eleccion;
         do {
             eleccion = vista.menuOperaciones();
@@ -33,16 +39,16 @@ public class ProveedorControlador {
    }
 	
 public void agregarProveedor() {
-	 String[] datosProveedor = vista.obtenerDatosProveedor();
+	try {
+	 String[] datosProveedor = vistaP.obtenerDatosProveedor();
      if (proveedor.insertarProveedor(datosProveedor[0], datosProveedor[1], datosProveedor[2])) {
          vista.mostrarMensaje("Proveedor añadido correctamente.");
      } else {
          vista.mostrarMensaje("Error al añadir Proveedor.");
-     }
+     }}catch(Exception e) {System.out.println("ERROR: " + e.getMessage());}
 }
-
 public void editarProveedor() {
-	String[] nuevosDatos = vista.obtenerDatosProveedor();
+	String[] nuevosDatos = vistaP.obtenerDatosProveedor();
     if (proveedor.editarProveedor(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2])) {
         vista.mostrarMensaje("Proveedor actualizado.");
     } else {
@@ -50,7 +56,7 @@ public void editarProveedor() {
     }
 }
 public void eliminarProveedor() {
-	String cifEliminar = vista.obtenerCif();
+	String cifEliminar = vistaP.obtenerCif();
     if (proveedor.eliminarProveedor(cifEliminar)) {
         vista.mostrarMensaje("Proveedor eliminado.");
     } else {

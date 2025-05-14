@@ -1,11 +1,16 @@
 package Controlador;
 import Vista.*;
 
-public class ControladorMenu {
+public class ControllerMenu {
 
 	 private Vista vista;
-	 private ClienteControlador clienteC;
-	 private ProveedorControlador proovedorC;
+	 private ControllerCliente clienteC;
+	 private ControllerProveedor proovedorC;
+	    public ControllerMenu() {
+	        vista = new Vista();                    // Inicializar vista
+	        clienteC = new ControllerCliente();    // Inicializar cliente
+	        proovedorC = new ControllerProveedor(); // Inicializar proveedor
+	    }
     public void menuPrincipal() {
         int eleccion;
         do {

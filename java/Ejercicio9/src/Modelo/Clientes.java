@@ -36,7 +36,6 @@ public class Clientes {
         }
         return false;  // Cliente no encontrado
     }
-
     // Método para insertar un cliente
     public boolean insertarCliente(String nombre, String email, String telefono) {
         if (buscarCliente(email)) {
@@ -67,7 +66,6 @@ public class Clientes {
         }
         return false;  // Error al insertar el cliente
     }
-
     // Método para mostrar todos los clientes
     public void mostrarClientes() {
         Connection conexion = Conexion.conectar();
@@ -99,7 +97,6 @@ public class Clientes {
             }
         }
     }
-
     // Método para eliminar un cliente por email
     public boolean eliminarCliente(String email) {
         if (!buscarCliente(email)) {
@@ -128,7 +125,6 @@ public class Clientes {
         }
         return false;  // Error al eliminar el cliente
     }
-
     // Método para editar un cliente
     public boolean editarCliente(String nombre, String email, String telefono) {
         if (!buscarCliente(email)) {

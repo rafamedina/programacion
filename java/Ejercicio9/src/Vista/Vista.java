@@ -12,7 +12,6 @@ public class Vista {
     public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
     }
-
     public int menuPrincipal() {
         System.out.println("----- MENÚ GENERAL -----");
         System.out.println("1 - MENU CLIENTES");
@@ -23,7 +22,6 @@ public class Vista {
         System.out.println("6 - SALIR");
         return obtenerOpcion();
     }
-
     public int menuOperaciones() {
         System.out.println("----- MENÚ -----");
         System.out.println("1 – AÑADIR");
@@ -32,38 +30,7 @@ public class Vista {
         System.out.println("4 – ELIMINAR");
         System.out.println("5 – SALIR");
         return obtenerOpcion();
-    }
-
-    public String obtenerCorreo() {
-        System.out.print("Introduce el correo del cliente: ");
-        return scanner.nextLine();
-    }
-    
-    public String obtenerCif() {
-        System.out.print("Introduce el cif del proveedor: ");
-        return scanner.nextLine();
-    }
-
-    public String[] obtenerDatosCliente() {
-        System.out.print("Introduce el nombre del cliente: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Introduce el correo del cliente: ");
-        String email = scanner.nextLine();
-        System.out.print("Introduce el teléfono del cliente: ");
-        String telefono = scanner.nextLine();
-        return new String[]{nombre, email, telefono};
-    }
-    
-    public String[] obtenerDatosProveedor() {
-        System.out.print("Introduce el nombre del Proveedor: ");
-        String nombre = scanner.nextLine();
-        System.out.print("Introduce el cif del Proveedor: ");
-        String cif = scanner.nextLine();
-        System.out.print("Introduce el teléfono del Proveedor: ");
-        String telefono = scanner.nextLine();
-        return new String[]{nombre, cif, telefono};
-    }
-   
+    } 
     public int obtenerOpcion() {
         int opcion;
         while (!scanner.hasNextInt()) {
@@ -74,7 +41,5 @@ public class Vista {
         scanner.nextLine(); 
         return opcion;
     }
-    
-    
 }
 

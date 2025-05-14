@@ -1,9 +1,15 @@
 package Controlador;
-import Vista.Vista;
+import Vista.*;
 import Modelo.Clientes;
-public class ClienteControlador {
+public class ControllerCliente {
     private Vista vista;
+    private vistaCliente vcliente;
     private Clientes cliente;
+    public ControllerCliente() {
+        vista = new Vista();                    // Inicializar vista
+        cliente= new Clientes();    // Inicializar cliente
+       
+    }
 	public void menuClientes() {
         int eleccion;
         do {
@@ -29,19 +35,17 @@ public class ClienteControlador {
                     vista.mostrarMensaje("Opción inválida.");
             }
         } while (eleccion != 5);
-    }
-	
+    }	
 	public void agregarCliente() {
-		 String[] datosCliente = vista.obtenerDatosCliente();
+		 String[] datosCliente = vcliente.obtenerDatosCliente();
          if (cliente.insertarCliente(datosCliente[0], datosCliente[1], datosCliente[2])) {
              vista.mostrarMensaje("Cliente añadido correctamente.");
          } else {
              vista.mostrarMensaje("Error al añadir cliente.");
          }
-		
 	}
 	public void datosClientes() {
-		String[] nuevosDatos = vista.obtenerDatosCliente();
+		String[] nuevosDatos = vcliente.obtenerDatosCliente();
         if (cliente.editarCliente(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2])) {
             vista.mostrarMensaje("Cliente actualizado.");
         } else {
@@ -49,7 +53,7 @@ public class ClienteControlador {
         }
 	}	
 	public void eliminarClientes() {
-		 String emailEliminar = vista.obtenerCorreo();
+		 String emailEliminar = vcliente.obtenerCorreo();
          if (cliente.eliminarCliente(emailEliminar)) {
              vista.mostrarMensaje("Cliente eliminado.");
          } else {
