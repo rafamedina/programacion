@@ -8,8 +8,7 @@ public class ControllerProveedor {
     private Proveedores proveedor;
     public ControllerProveedor() {
         vista = new Vista();                    // Inicializar vista
-        proveedor = new Proveedores(); 		// Inicializar proveedor   
-        vistaP = new vistaProveedor();
+        proveedor = new Proveedores();    // Inicializar proveedor       
     }
 	public void menuProveedores() {
 	

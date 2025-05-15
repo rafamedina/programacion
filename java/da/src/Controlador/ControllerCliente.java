@@ -6,9 +6,9 @@ public class ControllerCliente {
     private vistaCliente vcliente;
     private Clientes cliente;
     public ControllerCliente() {
-        vista = new Vista();        // Inicializar vista
+        vista = new Vista();                    // Inicializar vista
         cliente= new Clientes();    // Inicializar cliente
-        vcliente= new vistaCliente();
+       
     }
 	public void menuClientes() {
         int eleccion;
@@ -25,7 +25,7 @@ public class ControllerCliente {
                     datosClientes();
                     break;
                 case 4:
-                	eliminarClientes();
+                   eliminarClientes();
                     break;
                 case 5:
                 	eleccion = 5;
