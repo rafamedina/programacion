@@ -11,7 +11,7 @@ public class ControllerCliente {
         vcliente= new vistaCliente();
     }
 	public void menuClientes() {
-        int eleccion;
+        int eleccion; 
         do {
             eleccion = vista.menuOperaciones();
             switch (eleccion) {
@@ -37,27 +37,40 @@ public class ControllerCliente {
         } while (eleccion != 5);
     }	
 	public void agregarCliente() {
-		 String[] datosCliente = vcliente.obtenerDatosCliente();
-         if (cliente.insertarCliente(datosCliente[0], datosCliente[1], datosCliente[2])) {
+         try {
+        	 String[] datosCliente = vcliente.obtenerDatosCliente();
+        	 cliente.insertarCliente(datosCliente[0], datosCliente[1], datosCliente[2]); 
              vista.mostrarMensaje("Cliente añadido correctamente.");
-         } else {
-             vista.mostrarMensaje("Error al añadir cliente.");
+         } catch(Exception e) {
+             vista.mostrarMensaje("Error" + e.getMessage());
          }
 	}
+	
+	
 	public void datosClientes() {
+		try {
+			
+			String correocomprobar=vcliente.obtenerCorreo();
+			
+			if(cliente.buscarCliente(correocomprobar)) {
 		String[] nuevosDatos = vcliente.obtenerDatosCliente();
-        if (cliente.editarCliente(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2])) {
+       cliente.editarCliente(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2], correocomprobar);
             vista.mostrarMensaje("Cliente actualizado.");
-        } else {
-            vista.mostrarMensaje("Error al editar cliente.");
+			}
+        } catch(Exception e) {
+            vista.mostrarMensaje("Error" + e.getMessage());
         }
-	}	
-	public void eliminarClientes() {
-		 String emailEliminar = vcliente.obtenerCorreo();
-         if (cliente.eliminarCliente(emailEliminar)) {
-             vista.mostrarMensaje("Cliente eliminado.");
-         } else {
-             vista.mostrarMensaje("Error al eliminar cliente.");
-         }
 	}
+
+	
+	
+	public void eliminarClientes() {
+		try {
+		 String emailEliminar = vcliente.obtenerCorreo();
+		 cliente.eliminarCliente(emailEliminar);
+             vista.mostrarMensaje("Cliente eliminado.");
+         } catch(Exception e) {
+             vista.mostrarMensaje("Error" + e.getMessage());
+         }
+ 	}
 }

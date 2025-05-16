@@ -49,11 +49,17 @@ public void agregarProveedor() {
      }}catch(Exception e) {System.out.println("ERROR: " + e.getMessage());}
 }
 public void editarProveedor() {
-	String[] nuevosDatos = vistaP.obtenerDatosProveedor();
-    if (proveedor.editarProveedor(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2])) {
-        vista.mostrarMensaje("Proveedor actualizado.");
-    } else {
-        vista.mostrarMensaje("Error al editar Proveedor.");
+	String cifcomprobar=vistaP.obtenerCif();
+	try {
+		if(proveedor.buscarProveedor(cifcomprobar)) {
+			String[] nuevosDatos = vistaP.obtenerDatosProveedor();
+		    if (proveedor.editarProveedor(nuevosDatos[0], nuevosDatos[1], nuevosDatos[2],cifcomprobar)) {
+		        vista.mostrarMensaje("Proveedor actualizado.");
+		}
+	}
+
+    } catch(Exception e) {
+        vista.mostrarMensaje("Error al editar Proveedor." + e.getMessage());
     }
 }
 public void eliminarProveedor() {

@@ -126,21 +126,20 @@ public class Clientes {
         return false;  // Error al eliminar el cliente
     }
     // Método para editar un cliente
-    public boolean editarCliente(String nombre, String email, String telefono) {
-        if (!buscarCliente(email)) {
-            return false;  // Cliente no encontrado
-        }
+    public boolean editarCliente(String nombre, String email, String telefono, String correo) {
+
 
         Connection conexion = Conexion.conectar();
         PreparedStatement psUpdate = null;
 
         try {
             if (conexion != null) {
-                String query = "UPDATE Clientes SET nombre=?, telefono=? WHERE email=?";
+                String query = "UPDATE Clientes SET nombre=?, telefono=?, email=? WHERE email=?";
                 psUpdate = conexion.prepareStatement(query);
                 psUpdate.setString(1, nombre);
                 psUpdate.setString(2, telefono);
                 psUpdate.setString(3, email);
+                psUpdate.setString(4, correo);
                 psUpdate.executeUpdate();
                 return true; // Cliente actualizado correctamente
             }

@@ -19,7 +19,8 @@ public class Vista {
         System.out.println("3 - MENU ARTICULOS");
         System.out.println("4 - MENU VENTAS");
         System.out.println("5 - MENU FACTURAS");
-        System.out.println("6 - SALIR");
+        System.out.println("6 - Clientes Facturas");
+        System.out.println("7 - SALIR");
         return obtenerOpcion();
     }
     public int menuOperaciones() {

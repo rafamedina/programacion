@@ -128,10 +128,8 @@ public class Proveedores {
 	    }
 
 	    // Método para editar un cliente
-	    public boolean editarProveedor(String nombre, String cif, String telefono) {
-	        if (!buscarProveedor(cif)) {
-	            return false;  // Cliente no encontrado
-	        }
+	    public boolean editarProveedor(String nombre, String cif, String telefono,String cifbuscar) {
+
 
 	        Connection conexion = Conexion.conectar();
 	        PreparedStatement psUpdate = null;
@@ -143,7 +141,7 @@ public class Proveedores {
 	                psUpdate.setString(1, nombre);
 	                psUpdate.setString(2, telefono);
 	                psUpdate.setString(3, cif);
-	                psUpdate.setString(4, cif);
+	                psUpdate.setString(4, cifbuscar);
 	                psUpdate.executeUpdate();
 	                return true; // Cliente actualizado correctamente
 	            }
