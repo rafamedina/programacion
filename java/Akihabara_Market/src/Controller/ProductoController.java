@@ -1,16 +1,60 @@
 package Controller;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import DAO.*;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import Model.LlmService;
 import Model.ProductoOtaku;
 import View.*;
-public class ProductoController {
+public class ProductoController extends JFrame{
 	ProductoDAO productodao = new ProductoDAO();
 	InterfazConsola interfaz = new InterfazConsola();
 	LlmService ia = new LlmService();
+	JFrame d;
+	JButton btn1;
+	JButton btn2;
+	
+
+	public void GUIMenu() {
+		
+		d = new JFrame();
+		btn1 = new JButton();
+		btn2 = new JButton();
+		d.setVisible(true); // Para que el formaulario sea visible
+		d.setBounds(650, 250, 400, 400); // Ajustamos el tamaño de nuestra pantalla, en orden: (coordenada x, coordeanda y(para donde aparece la pantalla), alto, ancho)
+		d.setDefaultCloseOperation(EXIT_ON_CLOSE);//Indicamos que cuando se cierre la ventana se termine la ejecucion
+		d.setLayout(null); // Mirar que hace
+		d.setTitle("Akihabara_Market");
+		
+		btn1.setBounds(5, 30, 200, 50);
+		btn1.setText("Insertar Cliente"); // Texto del Boton
+		btn1.setBackground(Color.pink);
+		btn1.addActionListener(new ActionListener() { // CON ESTO AÑADES QUE QUIERES QUE HAGA EL BOTON			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gestionInsertarCliente();
+			}			
+		});	
+		btn2.setBounds(5, 80, 200, 50);
+		btn2.setText("Buscar Producto"); // Texto del Boton
+		btn2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gestionBuscarProducto();
+			}	
+		});	
+		d.add(btn1); // Con esto agregamos el boton a nuestro panel
+		d.add(btn2);
+		}
+	
+	
 	
 	public void gestionMenu() {
 	    // Cargamos productos de prueba al iniciar la aplicación
@@ -82,7 +126,7 @@ public class ProductoController {
 	}
 
 
-	
+
 	
 	public void gestionInsertarCliente() {
 		

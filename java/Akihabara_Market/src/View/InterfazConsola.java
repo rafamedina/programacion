@@ -53,7 +53,7 @@ Scanner scanner = new Scanner(System.in);
 
 
 	 public int pedirId() {
-	        return leerEntero("Que id quieres editar: ");
+	        return leerEntero("Dame un ID: ");
 	    }
 	 
 	public String pedirEdicion() {
