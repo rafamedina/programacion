@@ -8,7 +8,8 @@ public class Main {
 		
 		ProductoController controller = new ProductoController();
 		// controller.gestionMenu();
-		controller.GUIMenu();
+		GuiController gui = new GuiController();
+		gui.setVisible(true);
 	}
 
 }
