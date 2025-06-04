@@ -16,70 +16,72 @@ public class LlmService {
     private final String apiUrl;
 
     public LlmService() {
-        // Al crear el servicio, intento cargar la clave API desde un archivo binario
-        this.apiKey = cargarApiKeyDesdeArchivo(); // También podría usar System.getenv("OPENROUTER_API_KEY")
+        // Cuando creo una instancia de esta clase, intento leer la API Key desde un archivo binario
+        this.apiKey = cargarApiKeyDesdeArchivo(); // También podría usar una variable de entorno
 
-        // Esta es la URL base del endpoint de OpenRouter para enviar prompts al LLM
+        // Establezco la URL del servicio de OpenRouter (donde se hacen las solicitudes)
         this.apiUrl = "https://openrouter.ai/api/v1/chat/completions";
 
-        // Si la clave API no está disponible, lo notifico
+        // Si no pude cargar la clave, muestro un error en consola
         if (this.apiKey == null || this.apiKey.isEmpty()) {
             System.err.println("ERROR: La API key no se pudo cargar.");
         }
     }
 
-    // Este método intenta leer la API Key desde un archivo binario llamado "apikey.dat"
+    // Este método busca la API Key dentro de un archivo local llamado "apikey.dat"
     private String cargarApiKeyDesdeArchivo() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("apikey.dat"))) {
-            return (String) in.readObject(); // Devuelvo la clave si se puede leer correctamente
+            // Si todo sale bien, devuelvo la cadena que representa la API key
+            return (String) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
+            // Si no se pudo leer, imprimo el error y retorno null
             System.err.println("Error leyendo la API key: " + e.getMessage());
-            return null; // Si hay error, devuelvo null
+            return null;
         }
     }
 
-    // Este método envía un mensaje al LLM y devuelve su respuesta
+    // Este método se encarga de enviar un mensaje al modelo LLM y recibir su respuesta
     public String realizarSolicitud(String mensajeUsuario) {
         try {
-            // Construyo el cuerpo de la petición en formato JSON
+            // Armo el cuerpo JSON de la solicitud HTTP con los parámetros del modelo
             JsonObject requestBody = new JsonObject();
-            requestBody.addProperty("model", "mistralai/mistral-small-3.1-24b-instruct:free"); // Modelo que quiero usar
-            requestBody.addProperty("system", "Habla en español"); // Instrucción general al modelo
-            requestBody.addProperty("temperature", 0.1); // Control de creatividad
-            requestBody.addProperty("max_tokens", 1500); // Límite de longitud de la respuesta
-            requestBody.addProperty("stream", false); // No uso streaming
+            requestBody.addProperty("model", "mistralai/mistral-small-3.1-24b-instruct:free"); // Modelo específico
+            requestBody.addProperty("system", "Habla en español"); // Instrucción general para el comportamiento del modelo
+            requestBody.addProperty("temperature", 0.1); // Bajo nivel de creatividad (más precisión)
+            requestBody.addProperty("max_tokens", 1500); // Máximo de tokens para la respuesta
+            requestBody.addProperty("stream", false); // No usamos respuestas en streaming
 
-            // Defino el mensaje del usuario como parte del array "messages"
+            // Agrego el mensaje del usuario como parte del array de mensajes
             JsonArray messages = new JsonArray();
             JsonObject userMessage = new JsonObject();
-            userMessage.addProperty("role", "user"); // Rol de quien envía el mensaje
-            userMessage.addProperty("content", mensajeUsuario); // El mensaje que quiero enviar al LLM
+            userMessage.addProperty("role", "user");
+            userMessage.addProperty("content", mensajeUsuario);
             messages.add(userMessage);
             requestBody.add("messages", messages);
 
-            // Creo un cliente HTTP moderno con la clase HttpClient
+            // Configuro el cliente HTTP
             HttpClient cliente = HttpClient.newHttpClient();
 
-            // Construyo la solicitud HTTP POST con cabeceras y cuerpo
+            // Creo la solicitud HTTP con método POST y cabeceras necesarias
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl)) // La URL a la que hago la solicitud
-                    .header("Authorization", "Bearer " + apiKey) // Autenticación con API Key
-                    .header("Content-Type", "application/json") // Indico que envío JSON
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString(), StandardCharsets.UTF_8)) // Cuerpo de la petición
+                    .uri(URI.create(apiUrl))
+                    .header("Authorization", "Bearer " + apiKey)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString(), StandardCharsets.UTF_8))
                     .build();
 
-            // Envío la solicitud y obtengo la respuesta
+            // Envío la solicitud al servidor de OpenRouter y obtengo la respuesta como string
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Convierto el cuerpo de la respuesta en un objeto JSON
+            // Convierto la respuesta en un objeto JSON para poder analizarla
             JsonObject respuestaJson = JsonParser.parseString(response.body()).getAsJsonObject();
 
-            // Verifico que haya un array "choices" (la respuesta del modelo)
+            // Reviso que haya un array llamado "choices", que contiene la respuesta del modelo
             if (!respuestaJson.has("choices")) {
                 return "La respuesta no contiene 'choices'.\nRespuesta completa:\n" + respuestaJson.toString();
             }
 
-            // Extraigo y devuelvo el contenido generado por el modelo
+            // Devuelvo el contenido textual que el modelo generó (la respuesta del chatbot)
             return respuestaJson
                     .getAsJsonArray("choices")
                     .get(0).getAsJsonObject()
@@ -87,9 +89,10 @@ public class LlmService {
                     .get("content").getAsString();
 
         } catch (IOException | InterruptedException | JsonParseException e) {
-            // Capturo errores posibles (conexión, parseo, interrupciones)
+            // En caso de error (red, parseo, interrupción), devuelvo un mensaje de error
             return "Error en la solicitud: " + e.getMessage();
         }
     }
 }
+
 

@@ -1,14 +1,6 @@
 package Controller;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-
 import DAO.*;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import Model.LlmService;
 import Model.ProductoOtaku;
 import View.*;
@@ -17,55 +9,53 @@ public class ProductoController {
 	InterfazConsola interfaz = new InterfazConsola();
 	LlmService ia = new LlmService();
 
-	
-	
-	
 	public void gestionMenu() {
-	    // Cargamos productos de prueba al iniciar la aplicación
+	    // Este método es el corazón del sistema. Muestro el menú principal y gestiono la elección del usuario.
+	    // Según la opción que elija, llamo al método correspondiente para realizar la acción (insertar, buscar, actualizar, etc.).
 	    SetupDatos.cargarProductosIniciales(productodao);
-
 	    int eleccion;
 
 	    do {
-	        // Muestro el menú principal al usuario y guardo su elección
 	        eleccion = interfaz.Menu();
 
 	        switch (eleccion) {
 	            case 1:
-	                // Inserto un producto nuevo
-	                gestionInsertarCliente();
+	                // Inserto un nuevo producto en el sistema.
+	                gestionInsertarProducto();
 	                break;
 	            case 2:
-	                // Busco un producto por ID
+	                // Busco un producto por su ID.
 	                gestionBuscarProducto();
 	                break;
 	            case 3:
-	                // Muestro todos los productos
+	                // Muestro todos los productos disponibles.
 	                gestionBuscarProductos();
 	                break;
 	            case 4:
-	                // Actualizo un producto existente
+	                // Actualizo un producto existente.
 	                gestionActualizarProducto();
 	                break;
 	            case 5:
-	                // Elimino un producto por ID
+	                // Elimino un producto usando su ID.
 	                gestionEliminarProducto();
 	                break;
 	            case 6:
-	                // Busco productos por nombre
+	                // Busco productos por nombre.
 	                gestionBuscarPorNombre();
 	                break;
 	            case 7:
-	                // Submenú con ayuda de IA
+	                // Entro al submenú de funciones con inteligencia artificial.
 	                int eleccion2;
 	                do {
 	                    eleccion2 = interfaz.menuIA();
 
 	                    switch (eleccion2) {
 	                        case 1:
+	                            // Pido a la IA que genere una descripción del producto.
 	                            descripcionIA();
 	                            break;
 	                        case 2:
+	                        	// Le pido a la IA que sugiera una categoría para un producto.
 	                        	categoriaIA();
 	                            break;
 	                        case 3:
@@ -75,9 +65,8 @@ public class ProductoController {
 	                            System.out.println("OPCION IA NO VALIDA");
 	                            break;
 	                    }
-	                } while (eleccion2 != 3); // Repite hasta que el usuario quiera volver al menú principal
+	                } while (eleccion2 != 3);
 	                break;
-
 	            case 8:
 	                System.out.println("SALIENDO DEL MENU...");
 	                break;
@@ -86,14 +75,11 @@ public class ProductoController {
 	                break;
 	        }
 
-	    } while (eleccion != 8); // El bucle termina cuando el usuario elige salir
+	    } while (eleccion != 8); // Repito el menú hasta que el usuario decida salir
 	}
 
-
-
-	
-	public void gestionInsertarCliente() {
-		
+	public void gestionInsertarProducto() {
+		// Aquí recojo los datos del nuevo producto desde la interfaz y lo intento agregar a la base de datos.
 		ProductoOtaku producto = interfaz.pedirDatos();
 		try {
 			productodao.AgregarProducto(producto);
@@ -101,9 +87,9 @@ public class ProductoController {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
 	}
-	
-	
+
 	public void gestionBuscarProducto() {
+		// Solicito un ID y muestro el producto si existe.
 		int id = interfaz.pedirId();
 		try { 
 			ProductoOtaku producto = productodao.obtenerProductoPorId(id);
@@ -112,7 +98,9 @@ public class ProductoController {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
 	}
+
 	public void gestionBuscarProductos() {
+		// Obtengo y muestro todos los productos de la base de datos.
 		try {
 			List<ProductoOtaku> datos = productodao.obtenerTodosLosProductos();
 			if(datos!= null) {
@@ -121,11 +109,10 @@ public class ProductoController {
 		} catch (Exception e) {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
-		
-		
 	}
-	
+
 	public void gestionActualizarProducto() {
+	    // Pido el ID del producto a actualizar, lo obtengo y luego pido qué campo quiere cambiar el usuario.
 	    int id = interfaz.pedirId();
 	    ProductoOtaku producto = productodao.obtenerProductoPorId(id);
 
@@ -141,6 +128,7 @@ public class ProductoController {
 	    }
 
 	    try {
+	        // Según lo que quiera cambiar el usuario, creo un nuevo objeto con los valores actualizados.
 	        switch (seleccion) {
 	            case "nombre":
 	                String nuevoNombre = interfaz.pedirNombre();
@@ -172,6 +160,7 @@ public class ProductoController {
 	                return;
 	        }
 
+	        // Intento actualizar el producto con los nuevos datos.
 	        boolean actualizado = productodao.actualizarProducto(producto);
 	        if (actualizado) {
 	        	interfaz.mostrarMensaje("PRODUCTO ACTUALIZADO CORRECTAMENTE");
@@ -183,53 +172,54 @@ public class ProductoController {
 	    	interfaz.mostrarMensaje("ERROR DURANTE LA ACTUALIZACION: " + e.getMessage());
 	    }
 	}
-	
+
 	public void gestionEliminarProducto() {
-		 int id = interfaz.pedirId();
-		 ProductoOtaku producto = productodao.obtenerProductoPorId(id);
-		 if(producto!=null) {
-		 try {
-			 productodao.eliminarProducto(id);
-		 } catch(Exception e) {
-			 interfaz.mostrarMensaje("ERROR DURANTE LA ELIMINACION: " + e.getMessage());
-		 }
-	}
+		// Elimino un producto si existe en la base de datos.
+		int id = interfaz.pedirId();
+		ProductoOtaku producto = productodao.obtenerProductoPorId(id);
+		if(producto!=null) {
+			try {
+				productodao.eliminarProducto(id);
+			} catch(Exception e) {
+				interfaz.mostrarMensaje("ERROR DURANTE LA ELIMINACION: " + e.getMessage());
+			}
+		}
 	}
 
 	public void gestionBuscarPorNombre() {
+		// Busco productos que coincidan con un nombre introducido por el usuario.
 		String nombre = interfaz.pedirNombre();
 		if(nombre!=null) {
 			try {
 				List<ProductoOtaku> datos = productodao.buscarProductosPorNombre(nombre);
 				if (datos!=null) {
-				interfaz.mostrarProductos(datos);
+					interfaz.mostrarProductos(datos);
 				} else {
 					interfaz.mostrarMensaje("NO ES UN NOMBRE VALIDO");
 				}
 			} catch (Exception e) {
 				interfaz.mostrarMensaje("ERROR DURANTE LA BUSQUEDA: " + e.getMessage());
 			}
-			
 		} else {
 			interfaz.mostrarMensaje("NO ES UN NOMBRE VALIDO: ");
 		}
 	}
-	
+
 	public void descripcionIA() {
+		// Le pido a la IA que genere una descripción de marketing para un producto específico.
 		try{
 			int id = interfaz.pedirId();
 			ProductoOtaku productoia = productodao.obtenerProductoPorId(id);
 			String prompt = "Genera una descripción de marketing breve y atractiva para el producto otaku: " + productoia.getNombre() + "de la categoría " + productoia.getCategoria() + "no me metas ningun hagstag solo haz la descripcion";
 			String respuesta = ia.realizarSolicitud(prompt);
 			interfaz.mostrarMensaje("IA: " + respuesta);
-			
-			
 		} catch(Exception e) {
 			interfaz.mostrarMensaje("ERROR" + e.getMessage());
 		}
 	}
-	
+
 	public void categoriaIA() {
+		// Le pido a la IA que sugiera una categoría para un producto, a partir de su nombre.
 		try {
 			String NombreNuevo = interfaz.pedirNombre();
 			String prompt = "Para un producto otaku llamado : " + NombreNuevo + " , sugiere una categoría adecuada de esta lista: Figura, Manga, Póster, Llavero, Ropa. Videojuego u Otro) Solo dime la categoria nada mas, en una sola palabra y si la respuesta es otro dime que categoria podriamos poner";
@@ -239,7 +229,7 @@ public class ProductoController {
 			interfaz.mostrarMensaje("ERROR" + e.getMessage());
 		}
 	}
-		
-	}
+}
+
 	
 
