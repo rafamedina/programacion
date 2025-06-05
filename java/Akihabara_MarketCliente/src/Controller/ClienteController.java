@@ -4,7 +4,7 @@ import DAO.*;
 import Model.LlmService;
 import Model.ProductoOtaku;
 import View.*;
-public class ProductoController {
+public class ClienteController {
 	ProductoDAO productodao = new ProductoDAO();
 	InterfazConsolaProducto interfaz = new InterfazConsolaProducto();
 	LlmService ia = new LlmService();
@@ -12,11 +12,10 @@ public class ProductoController {
 	public void gestionMenu() {
 	    // Este método es el corazón del sistema. Muestro el menú principal y gestiono la elección del usuario.
 	    // Según la opción que elija, llamo al método correspondiente para realizar la acción (insertar, buscar, actualizar, etc.).
-	    SetupDatos.cargarProductosIniciales(productodao);
 	    int eleccion;
 
 	    do {
-	        eleccion = interfaz.MenuController();
+	        eleccion = interfaz.Menu();
 
 	        switch (eleccion) {
 	            case 1:

@@ -4,11 +4,10 @@ import java.util.Scanner;
 
 import Model.ProductoOtaku;
 
-public class InterfazConsola {
-    Scanner scanner;
-
+public class InterfazConsolaProducto {
+    Scanner scanner = new Scanner(System.in);
     public int leerEntero(String mensaje) {
-    	scanner = new Scanner(System.in);
+  
         // Leo un número entero desde consola, validando que sea positivo.
         int numero = -1;
         boolean valido = false;
@@ -27,13 +26,11 @@ public class InterfazConsola {
                 System.out.println("Entrada inválida. Debes escribir un número entero.");
             }
         }
-        scanner.close();
         return numero;
     }
 
     public double leerDecimal(String mensaje) {
         // Leo un número decimal desde consola, también validando que sea positivo.
-    	scanner = new Scanner(System.in);
         double numero = -1;
         boolean valido = false;
 
@@ -51,7 +48,6 @@ public class InterfazConsola {
                 System.out.println("Entrada inválida. Debes escribir un número decimal.");
             }
         }
-        scanner.close();
         return numero;
     }
 
@@ -87,7 +83,6 @@ public class InterfazConsola {
     }
 
     public String pedirNombre() {
-    	scanner = new Scanner(System.in);
         // Pido al usuario un nombre de producto válido (no vacío)
         System.out.print("Dime el nombre: ");
         String nombre = scanner.nextLine().trim();
@@ -97,13 +92,11 @@ public class InterfazConsola {
             return nombre;
         } else {
             System.out.println("El nombre no puede estar vacío.");
-            scanner.close();
             return pedirNombre();
         }
     }
 
     public String pedirCategoria() {
-    	scanner = new Scanner(System.in);
         // Pido al usuario una categoría válida (no vacía)
         System.out.print("Dime la categoria: ");
         String categoria = scanner.nextLine().trim();
@@ -113,7 +106,6 @@ public class InterfazConsola {
             return categoria;
         } else {
             System.out.println("La categoría no puede estar vacía.");
-            scanner.close();
             return pedirCategoria();
         }
     }
@@ -142,7 +134,7 @@ public class InterfazConsola {
         return new ProductoOtaku(nombre, categoria, precio, stock);
     }
 
-    public int Menu() {
+    public int MenuController() {
         // Muestro el menú principal del sistema
         System.out.println("-------Menú-------");
         System.out.println("1. Agregar Producto");
@@ -153,6 +145,16 @@ public class InterfazConsola {
         System.out.println("6. Buscar Producto por Nombre");
         System.out.println("7. Asistente IA");
         System.out.println("8. Salir");
+        int eleccion = eleccion();
+        return eleccion;
+    }
+    
+    public int Menu() {
+        // Muestro el menú principal del sistema
+        System.out.println("-------Menú-------");
+        System.out.println("1. Productos");
+        System.out.println("2. Clientes");
+        System.out.println("3. Salir");
         int eleccion = eleccion();
         return eleccion;
     }

@@ -16,6 +16,13 @@ public class ClienteOtaku {
         this.telefono = telefono;
         
     }
+    
+    public ClienteOtaku( String nombre, String email, String telefono, Date fecha_registro) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+        this.fecha_registro = fecha_registro;
+    }
 
     // Este constructor lo uso cuando ya conozco el ID del producto (por ejemplo, al leer desde la base de datos)
     public ClienteOtaku(int id, String nombre, String email, String telefono, Date fecha_registro) {
