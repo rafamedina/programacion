@@ -16,6 +16,8 @@ public class ClienteDAO {
 		PreparedStatement stmt = null;
 		try {
 			if(conexion != null) {
+				System.out.println("Vamos a comprobar si existe un cliente con ese Correo:");
+				System.out.println("comprobando. . . . .");
 				ClienteOtaku buscarcliente=buscarPorEmail(cliente.getEmail());
 				if(buscarcliente == null) {
 				String Sql = "INSERT INTO clientes (nombre, email, telefono, fecha_registro) VALUES (?,?,?,CURDATE()) ";
@@ -86,7 +88,6 @@ public class ClienteDAO {
 	}
 
 	public List<ClienteOtaku> obtenerTodosLosClientes() {
-	    // Este método trae todos los productos de la tabla y los guarda en una lista.
 	    List<ClienteOtaku> lista = new ArrayList<>();
 
 	    Connection conexion = DatabaseConnection.conectar();
@@ -99,16 +100,15 @@ public class ClienteDAO {
 	            stmt = conexion.prepareStatement(sql);
 	            rs = stmt.executeQuery();
 
-	            if (rs.next()) {
-	                // Si hay resultados, construyo el objeto con los datos de la BD
-	            	ClienteOtaku cliente = new ClienteOtaku(
-	                	rs.getInt("id"),
-	                	rs.getString("nombre"),
-	                	rs.getString("email"),
-	                	rs.getString("telefono"),
-	                	rs.getDate("fecha_registro")
+	            while (rs.next()) {
+	                ClienteOtaku cliente = new ClienteOtaku(
+	                    rs.getInt("id"),
+	                    rs.getString("nombre"),
+	                    rs.getString("email"),
+	                    rs.getString("telefono"),
+	                    rs.getDate("fecha_registro")
 	                );
-	                lista.add(cliente); // Lo agrego a la lista
+	                lista.add(cliente);
 	            }
 	        }
 	    } catch (SQLException e) {
@@ -123,49 +123,47 @@ public class ClienteDAO {
 	        }
 	    }
 
-	    return lista; // Devuelvo la lista completa
+	    return lista;
 	}
 
 	public boolean actualizarCliente(ClienteOtaku cliente) {
-		// Actualizo un producto existente en la base, usando su ID como referencia.
-		Connection conexion = DatabaseConnection.conectar();
-		PreparedStatement stmt = null;
-		boolean actualizado = false;
+	    Connection conexion = DatabaseConnection.conectar();
+	    PreparedStatement stmt = null;
+	    boolean actualizado = false;
 
-		try {
-			if(conexion != null) {
-				String sql = "UPDATE clientes SET nombre = ?, email = ?, telefono = ?, fecha_registro = ? WHERE id = ?";
-				stmt = conexion.prepareStatement(sql);
-				// Cargo los datos actualizados al statement
-				stmt.setString(1, cliente.getNombre());
-				stmt.setString(2, cliente.getEmail());
-				stmt.setString(3, cliente.getTelefono());
-				stmt.setDate(4, cliente.getFecha_registro());
-				stmt.setInt(5, cliente.getId());
+	    try {
+	        if (conexion != null) {
+	            String sql = "UPDATE clientes SET nombre = ?, email = ?, telefono = ? WHERE id = ?";
+	            stmt = conexion.prepareStatement(sql);
 
-				int filasAfectadas = stmt.executeUpdate();
+	            stmt.setString(1, cliente.getNombre());
+	            stmt.setString(2, cliente.getEmail());
+	            stmt.setString(3, cliente.getTelefono());
+	            stmt.setInt(4, cliente.getId());
 
-				// Si al menos una fila fue afectada, el producto se actualizó correctamente
-				if (filasAfectadas > 0) {
-					System.out.println("CLIENTE ACTUALIZADO CORRECTAMENTE");
-					actualizado = true;
-				} else {
-					System.out.println("NO SE ENCONTRO NINGUN CLIENTE CON ESE ID");
-				}
-			}
-		} catch (SQLException e) {
-			System.out.println("ERROR ACTUALIZANDO CLIENTE " + e.getMessage());
-		} finally {
-			try {
-				if (stmt != null) stmt.close();
-				if (conexion != null) conexion.close();
-			} catch (SQLException e) {
-				System.out.println("ERROR AL CERRAR CONEXION: " + e.getMessage());
-			}
-		}
+	            int filasAfectadas = stmt.executeUpdate();
 
-		return actualizado;
+	            if (filasAfectadas > 0) {
+	                System.out.println("CLIENTE ACTUALIZADO CORRECTAMENTE");
+	                actualizado = true;
+	            } else {
+	                System.out.println("NO SE ENCONTRO NINGUN CLIENTE CON ESE ID");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("ERROR ACTUALIZANDO CLIENTE " + e.getMessage());
+	    } finally {
+	        try {
+	            if (stmt != null) stmt.close();
+	            if (conexion != null) conexion.close();
+	        } catch (SQLException e) {
+	            System.out.println("ERROR AL CERRAR CONEXION: " + e.getMessage());
+	        }
+	    }
+
+	    return actualizado;
 	}
+
 
 	public boolean eliminarCliente(int id) {
 	    // Borro un producto de la base de datos si existe con el ID dado.
@@ -211,6 +209,7 @@ public class ClienteDAO {
 		ClienteOtaku cliente = null;
 		try {
 			if (conexion != null) {
+				
 				String sql = "SELECT * FROM clientes WHERE email COLLATE utf8mb4_general_ci = ?";
 				stmt = conexion.prepareStatement(sql);
 				stmt.setString(1, email);
@@ -226,7 +225,7 @@ public class ClienteDAO {
 	                	rs.getDate("fecha_registro")
 	                );
 				} else {
-					System.out.println("NO SE ENCONTRO NINGUN CLIENTE");
+					System.out.println("NO SE ENCONTRO NINGUN CLIENTE CON ESE CORREO");
 				}
 			}
 		} catch (SQLException e) {
@@ -243,6 +242,8 @@ public class ClienteDAO {
 
 		return cliente;
 	}
+
+	
 }
 
 	

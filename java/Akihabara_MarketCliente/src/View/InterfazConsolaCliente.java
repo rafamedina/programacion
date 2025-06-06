@@ -56,10 +56,10 @@ public class InterfazConsolaCliente {
 
     public String pedirEdicion() {
         // Pregunto qué campo desea editar el usuario (nombre, categoría, precio, etc.)
-        String[] opcionesValidas = {"nombre", "email", "telefono", "fecha registro", "todo"};
+        String[] opcionesValidas = {"nombre", "email", "telefono", "todo"};
         String seleccion;
 
-        System.out.println("¿Qué parte quieres modificar? (nombre, email, telefono, fecha registro, todo)");
+        System.out.println("¿Qué parte quieres modificar? (nombre, email, telefono, todo)");
         System.out.println("Escribe 'salir' para cancelar.");
 
         while (true) {
@@ -130,6 +130,7 @@ public class InterfazConsolaCliente {
             System.out.print("Dime la fecha (formato: YYYY-MM-DD): ");
             fechaInput = scanner.nextLine().trim();
 
+            
             // Verificar que la fecha no esté vacía
             if (fechaInput.isEmpty()) {
                 System.out.println("La fecha no puede estar vacía.");
@@ -165,11 +166,10 @@ public class InterfazConsolaCliente {
         String nombre = pedirNombre();
         String email = pedirEmail();
         String tlf = pedirTelefono();
-        Date fecha = pedirFecha();
-        return new ClienteOtaku(nombre, email, tlf, fecha);
+        return new ClienteOtaku(nombre, email, tlf);
     }
 
-    public int Menu() {
+    public int MenuCliente() {
         // Muestro el menú principal del sistema
         System.out.println("-------Menú-------");
         System.out.println("1. Agregar Cliente");
@@ -178,8 +178,7 @@ public class InterfazConsolaCliente {
         System.out.println("4. Actualizar un Cliente");
         System.out.println("5. Eliminar un Cliente");
         System.out.println("6. Buscar Producto por Email");
-        System.out.println("7. Asistente IA");
-        System.out.println("8. Salir");
+        System.out.println("7. Salir");
         int eleccion = eleccion();
         return eleccion;
     }
@@ -189,31 +188,38 @@ public class InterfazConsolaCliente {
         System.out.println(mensaje);
     }
 
-    public void mostrarProducto(ProductoOtaku producto) {
-        // Imprimo los datos de un solo producto en formato amigable
-        System.out.printf("ID: %d | NOMBRE: %-25s | CATEGORIA: %-10s | PRECIO: %.2f € | STOCK: %d\n",
-                producto.getId(),
-                producto.getNombre(),
-                producto.getCategoria(),
-                producto.getPrecio(),
-                producto.getStock());
+    public void mostrarCliente(ClienteOtaku cliente) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha = sdf.format(cliente.getFecha_registro());
+
+        System.out.printf("ID: %d | NOMBRE: %-25s | EMAIL: %-20s | TELEFONO: %-15s | FECHA REGISTRO: %s\n",
+                cliente.getId(),
+                cliente.getNombre(),
+                cliente.getEmail(),
+                cliente.getTelefono(),
+                fecha);
     }
 
-    public void mostrarProductos(List<ProductoOtaku> lista) {
-        // Imprimo una tabla con todos los productos disponibles
-        System.out.printf("%-5s | %-25s | %-10s | %-10s | %-5s\n", 
-                          "ID", "NOMBRE", "CATEGORIA", "PRECIO", "STOCK");
-        System.out.println("----------------------------------------------------------------------");
 
-        for (ProductoOtaku producto : lista) {
-            System.out.printf("%-5d | %-25s | %-10s | %10.2f € | %-5d\n",
-                              producto.getId(),
-                              producto.getNombre(),
-                              producto.getCategoria(),
-                              producto.getPrecio(),
-                              producto.getStock());
+    public void mostrarClientes(List<ClienteOtaku> lista) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        System.out.printf("%-5s | %-25s | %-20s | %-15s | %-15s\n",
+                "ID", "NOMBRE", "EMAIL", "TELEFONO", "FECHA REGISTRO");
+        System.out.println("------------------------------------------------------------------------------------");
+
+        for (ClienteOtaku cliente : lista) {
+            String fecha = sdf.format(cliente.getFecha_registro());
+
+            System.out.printf("%-5d | %-25s | %-20s | %-15s | %-15s\n",
+                    cliente.getId(),
+                    cliente.getNombre(),
+                    cliente.getEmail(),
+                    cliente.getTelefono(),
+                    fecha);
         }
     }
+
 
 }
 

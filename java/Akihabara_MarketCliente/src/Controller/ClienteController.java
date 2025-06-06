@@ -1,13 +1,14 @@
 package Controller;
+import java.sql.Date;
 import java.util.List;
 import DAO.*;
+import Model.ClienteOtaku;
 import Model.LlmService;
 import Model.ProductoOtaku;
 import View.*;
 public class ClienteController {
-	ProductoDAO productodao = new ProductoDAO();
-	InterfazConsolaProducto interfaz = new InterfazConsolaProducto();
-	LlmService ia = new LlmService();
+	ClienteDAO clientedao = new ClienteDAO();
+	InterfazConsolaCliente interfaz = new InterfazConsolaCliente();
 
 	public void gestionMenu() {
 	    // Este método es el corazón del sistema. Muestro el menú principal y gestiono la elección del usuario.
@@ -15,58 +16,34 @@ public class ClienteController {
 	    int eleccion;
 
 	    do {
-	        eleccion = interfaz.Menu();
+	        eleccion = interfaz.MenuCliente();
 
 	        switch (eleccion) {
 	            case 1:
 	                // Inserto un nuevo producto en el sistema.
-	                gestionInsertarProducto();
+	            	gestionInsertarCliente();
 	                break;
 	            case 2:
 	                // Busco un producto por su ID.
-	                gestionBuscarProducto();
+	            	gestionBuscarCliente();
 	                break;
 	            case 3:
 	                // Muestro todos los productos disponibles.
-	                gestionBuscarProductos();
+	            	gestionBuscarClientes();
 	                break;
 	            case 4:
 	                // Actualizo un producto existente.
-	                gestionActualizarProducto();
+	            	gestionActualizarCliente();
 	                break;
 	            case 5:
 	                // Elimino un producto usando su ID.
-	                gestionEliminarProducto();
+	            	gestionEliminarCliente();
 	                break;
 	            case 6:
 	                // Busco productos por nombre.
 	                gestionBuscarPorNombre();
 	                break;
 	            case 7:
-	                // Entro al submenú de funciones con inteligencia artificial.
-	                int eleccion2;
-	                do {
-	                    eleccion2 = interfaz.menuIA();
-
-	                    switch (eleccion2) {
-	                        case 1:
-	                            // Pido a la IA que genere una descripción del producto.
-	                            descripcionIA();
-	                            break;
-	                        case 2:
-	                        	// Le pido a la IA que sugiera una categoría para un producto.
-	                        	categoriaIA();
-	                            break;
-	                        case 3:
-	                            System.out.println("VOLVIENDO AL MENU PRINCIPAL...");
-	                            break;
-	                        default:
-	                            System.out.println("OPCION IA NO VALIDA");
-	                            break;
-	                    }
-	                } while (eleccion2 != 3);
-	                break;
-	            case 8:
 	                System.out.println("SALIENDO DEL MENU...");
 	                break;
 	            default:
@@ -74,49 +51,49 @@ public class ClienteController {
 	                break;
 	        }
 
-	    } while (eleccion != 8); // Repito el menú hasta que el usuario decida salir
+	    } while (eleccion != 7); // Repito el menú hasta que el usuario decida salir
 	}
 
-	public void gestionInsertarProducto() {
+	public void gestionInsertarCliente() {
 		// Aquí recojo los datos del nuevo producto desde la interfaz y lo intento agregar a la base de datos.
-		ProductoOtaku producto = interfaz.pedirDatos();
+		ClienteOtaku cliente = interfaz.pedirDatos();
 		try {
-			productodao.AgregarProducto(producto);
+			clientedao.agregarCliente(cliente);
 		} catch (Exception e) {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
 	}
 
-	public void gestionBuscarProducto() {
+	public void gestionBuscarCliente() {
 		// Solicito un ID y muestro el producto si existe.
 		int id = interfaz.pedirId();
 		try { 
-			ProductoOtaku producto = productodao.obtenerProductoPorId(id);
-			interfaz.mostrarProducto(producto);
+			ClienteOtaku cliente = clientedao.obtenerClientePorId(id);
+			interfaz.mostrarCliente(cliente);
 		} catch( Exception e) {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
 	}
 
-	public void gestionBuscarProductos() {
+	public void gestionBuscarClientes() {
 		// Obtengo y muestro todos los productos de la base de datos.
 		try {
-			List<ProductoOtaku> datos = productodao.obtenerTodosLosProductos();
+			List<ClienteOtaku> datos = clientedao.obtenerTodosLosClientes();
 			if(datos!= null) {
-				interfaz.mostrarProductos(datos);
+				interfaz.mostrarClientes(datos);
 			}
 		} catch (Exception e) {
 			interfaz.mostrarMensaje("ERROR " + e.getMessage());
 		}
 	}
 
-	public void gestionActualizarProducto() {
+	public void gestionActualizarCliente() {
 	    // Pido el ID del producto a actualizar, lo obtengo y luego pido qué campo quiere cambiar el usuario.
 	    int id = interfaz.pedirId();
-	    ProductoOtaku producto = productodao.obtenerProductoPorId(id);
+	    ClienteOtaku cliente = clientedao.obtenerClientePorId(id);
 
-	    if (producto == null) {
-	    	interfaz.mostrarMensaje("NO SE ENCONTRO NINGUN PRODUCTO CON ESE ID");
+	    if (cliente == null) {
+	    	interfaz.mostrarMensaje("NO SE ENCONTRO NINGUN CLIENTE CON ESE ID");
 	        return;
 	    }
 
@@ -131,27 +108,22 @@ public class ClienteController {
 	        switch (seleccion) {
 	            case "nombre":
 	                String nuevoNombre = interfaz.pedirNombre();
-	                producto = new ProductoOtaku(id, nuevoNombre, producto.getCategoria(), producto.getPrecio(), producto.getStock());
+	                cliente = new ClienteOtaku(id, nuevoNombre, cliente.getEmail(), cliente.getTelefono(), cliente.getFecha_registro());
 	                break;
 
-	            case "categoria":
-	                String nuevaCategoria = interfaz.pedirCategoria();
-	                producto = new ProductoOtaku(id, producto.getNombre(), nuevaCategoria, producto.getPrecio(), producto.getStock());
+	            case "email":
+	                String nuevoEmail = interfaz.pedirEmail();
+	                cliente = new ClienteOtaku(id, cliente.getNombre(), nuevoEmail, cliente.getTelefono(), cliente.getFecha_registro());
 	                break;
 
-	            case "precio":
-	                double nuevoPrecio = interfaz.pedirPrecio();
-	                producto = new ProductoOtaku(id, producto.getNombre(), producto.getCategoria(), nuevoPrecio, producto.getStock());
-	                break;
-
-	            case "stock":
-	                int nuevoStock = interfaz.pedirStock();
-	                producto = new ProductoOtaku(id, producto.getNombre(), producto.getCategoria(), producto.getPrecio(), nuevoStock);
+	            case "telefono":
+	                String nuevoTelefono = interfaz.pedirTelefono();
+	                cliente = new ClienteOtaku(id, cliente.getNombre(), cliente.getEmail(), nuevoTelefono, cliente.getFecha_registro());
 	                break;
 	                
 	            case "todo":
-	            	ProductoOtaku productox = interfaz.pedirDatos();
-	            	producto = new ProductoOtaku(id, productox.getNombre(), productox.getCategoria(), productox.getPrecio(), productox.getStock());
+	            	ClienteOtaku clientex = interfaz.pedirDatos();
+	            	cliente = new ClienteOtaku(id, clientex.getNombre(), clientex.getEmail(), clientex.getTelefono(), clientex.getFecha_registro());
 	            	break;
 
 	            default:
@@ -159,12 +131,12 @@ public class ClienteController {
 	                return;
 	        }
 
-	        // Intento actualizar el producto con los nuevos datos.
-	        boolean actualizado = productodao.actualizarProducto(producto);
+	        // Intento actualizar el cliente con los nuevos datos.
+	        boolean actualizado = clientedao.actualizarCliente(cliente);
 	        if (actualizado) {
-	        	interfaz.mostrarMensaje("PRODUCTO ACTUALIZADO CORRECTAMENTE");
+	        	interfaz.mostrarMensaje("CLIENTE ACTUALIZADO CORRECTAMENTE");
 	        } else {
-	        	interfaz.mostrarMensaje("NO SE PUDO ACTUALIZAR EL PRODUCTO");
+	        	interfaz.mostrarMensaje("NO SE PUDO ACTUALIZAR EL CLIENTE");
 	        }
 
 	    } catch (Exception e) {
@@ -172,13 +144,13 @@ public class ClienteController {
 	    }
 	}
 
-	public void gestionEliminarProducto() {
+	public void gestionEliminarCliente() {
 		// Elimino un producto si existe en la base de datos.
 		int id = interfaz.pedirId();
-		ProductoOtaku producto = productodao.obtenerProductoPorId(id);
-		if(producto!=null) {
+		ClienteOtaku cliente = clientedao.obtenerClientePorId(id);
+		if(cliente!=null) {
 			try {
-				productodao.eliminarProducto(id);
+				clientedao.eliminarCliente(id);
 			} catch(Exception e) {
 				interfaz.mostrarMensaje("ERROR DURANTE LA ELIMINACION: " + e.getMessage());
 			}
@@ -187,45 +159,20 @@ public class ClienteController {
 
 	public void gestionBuscarPorNombre() {
 		// Busco productos que coincidan con un nombre introducido por el usuario.
-		String nombre = interfaz.pedirNombre();
-		if(nombre!=null) {
+		String email = interfaz.pedirEmail();
+		if(email!=null) {
 			try {
-				List<ProductoOtaku> datos = productodao.buscarProductosPorNombre(nombre);
+				ClienteOtaku datos = clientedao.buscarPorEmail(email);
 				if (datos!=null) {
-					interfaz.mostrarProductos(datos);
+					interfaz.mostrarCliente(datos);
 				} else {
-					interfaz.mostrarMensaje("NO ES UN NOMBRE VALIDO");
+					interfaz.mostrarMensaje("NO ES UN EMAIL VALIDO");
 				}
 			} catch (Exception e) {
 				interfaz.mostrarMensaje("ERROR DURANTE LA BUSQUEDA: " + e.getMessage());
 			}
 		} else {
-			interfaz.mostrarMensaje("NO ES UN NOMBRE VALIDO: ");
-		}
-	}
-
-	public void descripcionIA() {
-		// Le pido a la IA que genere una descripción de marketing para un producto específico.
-		try{
-			int id = interfaz.pedirId();
-			ProductoOtaku productoia = productodao.obtenerProductoPorId(id);
-			String prompt = "Genera una descripción de marketing breve y atractiva para el producto otaku: " + productoia.getNombre() + "de la categoría " + productoia.getCategoria() + "no me metas ningun hagstag solo haz la descripcion";
-			String respuesta = ia.realizarSolicitud(prompt);
-			interfaz.mostrarMensaje("IA: " + respuesta);
-		} catch(Exception e) {
-			interfaz.mostrarMensaje("ERROR" + e.getMessage());
-		}
-	}
-
-	public void categoriaIA() {
-		// Le pido a la IA que sugiera una categoría para un producto, a partir de su nombre.
-		try {
-			String NombreNuevo = interfaz.pedirNombre();
-			String prompt = "Para un producto otaku llamado : " + NombreNuevo + " , sugiere una categoría adecuada de esta lista: Figura, Manga, Póster, Llavero, Ropa. Videojuego u Otro) Solo dime la categoria nada mas, en una sola palabra y si la respuesta es otro dime que categoria podriamos poner";
-			String respuesta = ia.realizarSolicitud(prompt);
-			interfaz.mostrarMensaje("IA: " + respuesta);	
-		} catch(Exception e) {
-			interfaz.mostrarMensaje("ERROR" + e.getMessage());
+			interfaz.mostrarMensaje("NO ES UN EMAIL VALIDO: ");
 		}
 	}
 }
