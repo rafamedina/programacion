@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import Model.ProductoOtaku;
 
-public class InterfazConsola extends JFrame {
+public class InterfazProducto extends JFrame {
 Scanner scanner = new Scanner(System.in);
 
 JTextArea inputFieldsalida = new JTextArea();

@@ -16,9 +16,9 @@ import Model.ProductoOtaku;
 import View.*;
 public class ProductoController extends JFrame{
 	ProductoDAO productodao = new ProductoDAO();
-	InterfazConsola interfaz = new InterfazConsola();
+	InterfazProducto interfaz = new InterfazProducto();
 	LlmService ia = new LlmService();
-	    JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
+	JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
 
 	    public void MenuProducto() {
 	        setTitle("Akihabara_Market");

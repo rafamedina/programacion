@@ -13,7 +13,7 @@ import Model.ProductoOtaku;
 import View.*;
 public class ClienteController extends JFrame {
 	ClienteDAO clientedao = new ClienteDAO();
-	InterfazConsolaCliente interfaz = new InterfazConsolaCliente();
+	InterfazCliente interfaz = new InterfazCliente();
 	 JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
 	public void MenuCliente() {
         setTitle("Akihabara_Market");
@@ -59,7 +59,7 @@ public class ClienteController extends JFrame {
         btn5.setBounds(5, 130, 180, 50);
         btn5.addActionListener(e -> gestionEliminarCliente());
         
-        btn6 = new JButton("Buscar por Nombre");
+        btn6 = new JButton("Buscar por Correo");
         btn6.setBounds(190, 130, 180, 50);
         btn6.addActionListener(e -> gestionBuscarPorEmail());
              

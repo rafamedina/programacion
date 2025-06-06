@@ -5,13 +5,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import DAO.ProductoDAO;
-import View.InterfazConsola;
+import View.InterfazProducto;
 
 
 public class ControllerGeneral extends JFrame {
 	ProductoController Pcontroller = new ProductoController();
 	ClienteController Ccontroller = new ClienteController();
-	InterfazConsola interfaz = new InterfazConsola();
+	InterfazProducto interfaz = new InterfazProducto();
 	ProductoDAO productodao = new ProductoDAO();
 	JFrame principal = new JFrame();
 	JButton btn1, btn2, btnsalir;

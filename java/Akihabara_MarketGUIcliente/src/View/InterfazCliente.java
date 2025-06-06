@@ -9,7 +9,7 @@ import java.util.List;
 
 import Model.ClienteOtaku;
 
-public class InterfazConsolaCliente extends JFrame {
+public class InterfazCliente extends JFrame {
     JTextArea campoSalida = new JTextArea();
 
     public Component crearCampoSalida() {
