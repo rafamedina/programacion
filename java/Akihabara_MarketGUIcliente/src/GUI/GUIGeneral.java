@@ -1,21 +1,23 @@
-package Controller;
+package GUI;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Controller.ClienteController;
+import Controller.ProductoController;
 import DAO.ProductoDAO;
 import View.InterfazProducto;
 
 
-public class ControllerGeneral extends JFrame {
-	ProductoController Pcontroller = new ProductoController();
-	ClienteController Ccontroller = new ClienteController();
+public class GUIGeneral extends JFrame {
+	GUICliente cliente = new GUICliente();
 	InterfazProducto interfaz = new InterfazProducto();
 	ProductoDAO productodao = new ProductoDAO();
+	GUIProducto producto = new GUIProducto();
 	JFrame principal = new JFrame();
 	JButton btn1, btn2, btnsalir;
-	public ControllerGeneral() {
+	public GUIGeneral() {
 		
 		 setTitle("AKIHABARA MARKET");
 	        setSize(400, 400);
@@ -26,12 +28,12 @@ public class ControllerGeneral extends JFrame {
 	        
 	        btn1 = new JButton("Menu Producto");
 	        btn1.setBounds(50, 50, 150, 50);
-	        btn1.addActionListener(e -> Pcontroller.MenuProducto());
+	        btn1.addActionListener(e -> producto.MenuProducto());
 	        add(btn1);
 	        
 	        btn2 = new JButton("Menu Cliente");
 	        btn2.setBounds(250, 50, 150, 50);
-	        btn2.addActionListener(e -> Ccontroller.MenuCliente());
+	        btn2.addActionListener(e -> cliente.MenuCliente());
 	        add(btn2);
 	        
 	        btnsalir = new JButton("Salir");

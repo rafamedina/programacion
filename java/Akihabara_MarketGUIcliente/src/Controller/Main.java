@@ -1,4 +1,5 @@
 package Controller;
+import GUI.GUIGeneral;
 import Model.LlmService;
 
 public class Main {
@@ -6,7 +7,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		
-		ControllerGeneral controller = new ControllerGeneral();
+		GUIGeneral controller = new GUIGeneral();
 		controller.setVisible(true);
 	}
 
