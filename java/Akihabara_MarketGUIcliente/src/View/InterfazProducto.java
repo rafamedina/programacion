@@ -34,39 +34,148 @@ String datoRecogido = "";
 
     // Métodos para capturar datos
     public int leerEntero(String mensaje) {
-        String entrada = JOptionPane.showInputDialog(this, mensaje);  // Pedir entrada por cuadro de diálogo
-        return Integer.parseInt(entrada);  // Convertir a entero
+        while (true) {
+            String entrada = JOptionPane.showInputDialog(this, mensaje);
+            if (entrada == null) {
+                JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                return -1;
+            }
+            try {
+                int numero = Integer.parseInt(entrada);
+                if (numero < 0) {
+                    JOptionPane.showMessageDialog(this, "El número debe ser positivo.");
+                } else {
+                    return numero;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Debes introducir un número entero válido.");
+            }
+        }
     }
+
 
     public double leerDecimal(String mensaje) {
-        String entrada = JOptionPane.showInputDialog(this, mensaje);  // Pedir entrada por cuadro de diálogo
-        return Double.parseDouble(entrada);  // Convertir a decimal
+        while (true) {
+            String entrada = JOptionPane.showInputDialog(this, mensaje);
+            if (entrada == null) {
+                JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                return -1;
+            }
+            try {
+                double numero = Double.parseDouble(entrada);
+                if (numero < 0) {
+                    JOptionPane.showMessageDialog(this, "El número debe ser positivo.");
+                } else {
+                    return numero;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Debes introducir un número decimal válido.");
+            }
+        }
     }
 
-    public String obtenerDatoRecogido() {
-        return datoRecogido;  // Retornar el dato recogido
-    }
+
 
     // Métodos para pedir datos del producto
     public String pedirNombre() {
-        return JOptionPane.showInputDialog(this, "Dime el nombre:");
+        String nombre = "";
+
+        while (nombre == null || nombre.trim().isEmpty()) {
+            nombre = JOptionPane.showInputDialog(this, "Dime el nombre:");
+            if (nombre == null) {
+                // El usuario canceló el cuadro de diálogo
+                JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                return null;
+            }
+            if (nombre.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
+            }
+        }
+
+        return nombre.trim();
     }
+
 
     public String pedirCategoria() {
-        return JOptionPane.showInputDialog(this, "Dime la categoría:");
+        String categoria = "";
+
+        while (categoria == null || categoria.trim().isEmpty()) {
+            categoria = JOptionPane.showInputDialog(this, "Dime la categoría:");
+            if (categoria == null) {
+                JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                return null;
+            }
+            if (categoria.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La categoría no puede estar vacía.");
+            }
+        }
+
+        return categoria.trim();
     }
+
 
     public double pedirPrecio() {
-        return leerDecimal("¿Qué precio nuevo quieres poner?");
+        while (true) {
+            try {
+                String entrada = JOptionPane.showInputDialog(this, "¿Qué precio nuevo quieres poner?");
+                if (entrada == null) {
+                    JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                    return -1;
+                }
+                double precio = Double.parseDouble(entrada);
+                if (precio < 0) {
+                    JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.");
+                } else {
+                    return precio;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Introduce un número válido para el precio.");
+            }
+        }
     }
 
+
     public int pedirStock() {
-        return leerEntero("¿Qué stock nuevo quieres poner?");
+        while (true) {
+            try {
+                String entrada = JOptionPane.showInputDialog(this, "¿Qué stock nuevo quieres poner?");
+                if (entrada == null) {
+                    JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                    return -1;
+                }
+                int stock = Integer.parseInt(entrada);
+                if (stock < 0) {
+                    JOptionPane.showMessageDialog(this, "El stock no puede ser negativo.");
+                } else {
+                    return stock;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Introduce un número válido para el stock.");
+            }
+        }
     }
+
     
     public int pedirId() {
-        return leerEntero("Dime un ID: ");
+        while (true) {
+            try {
+                String entrada = JOptionPane.showInputDialog(this, "Dime un ID:");
+                if (entrada == null) {
+                    JOptionPane.showMessageDialog(this, "Operación cancelada.");
+                    return -1;
+                }
+                int id = Integer.parseInt(entrada);
+                if (id < 0) {
+                    JOptionPane.showMessageDialog(this, "El ID no puede ser negativo.");
+                } else {
+                    return id;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Introduce un número válido para el ID.");
+            }
+        }
     }
+
     
     // Pedir datos completos del producto
     public ProductoOtaku pedirDatos() {
