@@ -77,62 +77,8 @@ String datoRecogido = "";
 
 
     // Métodos para pedir datos del producto
-    public String pedirNombre() {
-        String nombre = "";
-
-        while (nombre == null || nombre.trim().isEmpty()) {
-            nombre = JOptionPane.showInputDialog(this, "Dime el nombre:");
-            if (nombre == null) {
-                // El usuario canceló el cuadro de diálogo
-                JOptionPane.showMessageDialog(this, "Operación cancelada.");
-                return null;
-            }
-            if (nombre.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
-            }
-        }
-
-        return nombre.trim();
-    }
 
 
-    public String pedirCategoria() {
-        String categoria = "";
-
-        while (categoria == null || categoria.trim().isEmpty()) {
-            categoria = JOptionPane.showInputDialog(this, "Dime la categoría:");
-            if (categoria == null) {
-                JOptionPane.showMessageDialog(this, "Operación cancelada.");
-                return null;
-            }
-            if (categoria.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "La categoría no puede estar vacía.");
-            }
-        }
-
-        return categoria.trim();
-    }
-
-
-    public double pedirPrecio() {
-        while (true) {
-            try {
-                String entrada = JOptionPane.showInputDialog(this, "¿Qué precio nuevo quieres poner?");
-                if (entrada == null) {
-                    JOptionPane.showMessageDialog(this, "Operación cancelada.");
-                    return -1;
-                }
-                double precio = Double.parseDouble(entrada);
-                if (precio < 0) {
-                    JOptionPane.showMessageDialog(this, "El precio no puede ser negativo.");
-                } else {
-                    return precio;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Introduce un número válido para el precio.");
-            }
-        }
-    }
 
 
     public int pedirStock() {
@@ -156,22 +102,30 @@ String datoRecogido = "";
     }
 
     
+    
+    public String pedirNombre() {
+        return pedirCampo("Dime el nombre:");
+    }
+
+    public String pedirCategoria() {
+        return pedirCampo("Dime la categoria:");
+    }
+
+    public Double pedirPrecio() {
+        return leerDecimal("Dime el precio:");
+    }
+
     public int pedirId() {
+        return leerEntero("Dame un ID:");
+    }
+
+    public String pedirCampo(String mensaje) {
         while (true) {
-            try {
-                String entrada = JOptionPane.showInputDialog(this, "Dime un ID:");
-                if (entrada == null) {
-                    JOptionPane.showMessageDialog(this, "Operación cancelada.");
-                    return -1;
-                }
-                int id = Integer.parseInt(entrada);
-                if (id < 0) {
-                    JOptionPane.showMessageDialog(this, "El ID no puede ser negativo.");
-                } else {
-                    return id;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Introduce un número válido para el ID.");
+            String valor = JOptionPane.showInputDialog(this, mensaje);
+            if (valor != null && !valor.trim().isEmpty()) {
+                return valor.trim();
+            } else {
+                JOptionPane.showMessageDialog(this, "El campo no puede estar vacío.");
             }
         }
     }
