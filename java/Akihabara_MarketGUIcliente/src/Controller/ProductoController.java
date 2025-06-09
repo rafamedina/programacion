@@ -149,31 +149,27 @@ public class ProductoController {
 		}
 	}
 	
-	public void descripcionIA() {
-		try{
-			int id = interfaz.pedirId();
-			ProductoOtaku productoia = productodao.obtenerProductoPorId(id);
-			String prompt = "Genera una descripción de marketing breve y atractiva para el producto otaku: " + productoia.getNombre() + "de la categoría " + productoia.getCategoria() + "no me metas ningun hagstag solo haz la descripcion";
-			String respuesta = ia.realizarSolicitud(prompt);
-			interfaz.mostrarMensaje("IA: " + respuesta);
-			
-			
-		} catch(Exception e) {
-			interfaz.mostrarMensaje("ERROR" + e.getMessage());
-		}
+	public String generarDescripcionIAyRetornar(int id) {
+	    try {
+	        ProductoOtaku producto = productodao.obtenerProductoPorId(id);
+	        String prompt = "Genera una descripción de marketing breve y atractiva para el producto otaku: " + producto.getNombre() + "de la categoría " + producto.getCategoria() + "no me metas ningun hagstag solo haz la descripcion";
+	        return ia.realizarSolicitud(prompt);
+	    } catch (Exception e) {
+	        return "ERROR: " + e.getMessage();
+	    }
 	}
-	
-	public void categoriaIA() {
-		try {
-			String NombreNuevo = interfaz.pedirNombre();
-			String prompt = "Para un producto otaku llamado : " + NombreNuevo + " , sugiere una categoría adecuada de esta lista: Figura, Manga, Póster, Llavero, Ropa. Videojuego u Otro) Solo dime la categoria nada mas, en una sola palabra y si la respuesta es otro dime que categoria podriamos poner";
-			String respuesta = ia.realizarSolicitud(prompt);
-			interfaz.mostrarMensaje("IA: " + respuesta);	
-		} catch(Exception e) {
-			interfaz.mostrarMensaje("ERROR" + e.getMessage());
-		}
+
+	public String generarCategoriaIAyRetornar(String nombreNuevo) {
+	    try {
+	        String prompt = "Para un producto otaku llamado : " + nombreNuevo + " , sugiere una categoría adecuada de esta lista: Figura, Manga, Póster, Llavero, Ropa. Videojuego u Otro) Solo dime la categoria nada mas, en una sola palabra y si la respuesta es otro dime que categoria podriamos poner";
+	        return ia.realizarSolicitud(prompt);
+	    } catch (Exception e) {
+	        return "ERROR: " + e.getMessage();
+	    }
 	}
-		
+
+
+
 	}
 	
 

@@ -1,9 +1,11 @@
 package GUI;
 
 import java.awt.Component;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JProgressBar;
 
 import Controller.ProductoController;
 import DAO.ProductoDAO;
@@ -12,7 +14,7 @@ import View.InterfazProducto;
 public class GUIProducto extends JFrame{
 	InterfazProducto interfaz = new InterfazProducto();
 	ProductoController productoC = new ProductoController(interfaz);
-
+	JProgressBar progressBar;
 	JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
 
     public void MenuProducto() {
@@ -40,6 +42,8 @@ public class GUIProducto extends JFrame{
     }
 
     public void CrearBotones() {
+
+    	
         btn1 = new JButton("Insertar Producto");
         btn1.setBounds(5, 30, 180, 50);
         btn1.addActionListener(e -> productoC.gestionInsertarCliente());
@@ -74,29 +78,128 @@ public class GUIProducto extends JFrame{
 
     }
 
+    public void crearPanelIa() {
+        JFrame pIa = new JFrame();
+        pIa.setTitle("Menu IA");
+        pIa.setSize(400, 250);
+        pIa.setLocation(650, 250);
+        pIa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pIa.setLayout(null);
 
-public void crearPanelIa() {
-	JFrame pIa = new JFrame();
-	pIa.setTitle("Menu IA");
-	pIa.setSize(400, 200);
-	pIa.setLocation(650, 250);
-	pIa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	pIa.setLayout(null);
-    btn7 = new JButton("Descripcion IA");
-    btn7.setBounds(5, 30, 180, 50);
-    btn7.addActionListener(e -> productoC.descripcionIA());
+        // Barra de progreso
+        JProgressBar progressBar = new JProgressBar(0, 100);
+        progressBar.setBounds(90, 145, 180, 25);
+        progressBar.setStringPainted(true);
+        pIa.add(progressBar);
 
-    btn8 = new JButton("Sugerir Categoria");
-    btn8.setBounds(185, 30, 180, 50);
-    btn8.addActionListener(e -> productoC.categoriaIA());
-    
-    btnvolver = new JButton("Volver");
-    btnvolver.setBounds(90, 90, 180, 50);
-    btnvolver.addActionListener(e -> pIa.setVisible(false));
-    
-    pIa.add(btn7);
-    pIa.add(btn8);
-    pIa.add(btnvolver);
-	pIa.setVisible(true);
-}
+        // Botón Descripción IA
+        btn7 = new JButton("Descripcion IA");
+        btn7.setBounds(5, 30, 180, 50);
+        btn7.addActionListener(e -> {
+            int id = interfaz.pedirId();
+            if (id <= 0) return;
+
+            btn7.setEnabled(false);
+            btn8.setEnabled(false);
+
+            Thread hiloIA = new Thread(() -> {
+                final String[] respuestaIA = new String[1];
+
+                // Hilo 1: hacer la petición a la IA (pero sin mostrar nada aún)
+                Thread iaThread = new Thread(() -> {
+                    respuestaIA[0] = productoC.generarDescripcionIAyRetornar(id); // nuevo método
+                });
+
+                // Hilo 2: barra de carga lineal
+                Thread barra = new Thread(() -> {
+                    for (int i = 0; i <= 100; i++) {
+                        progressBar.setValue(i);
+                        try {
+                            Thread.sleep(30); // Duración total de 3s
+                        } catch (InterruptedException ex) {
+                            return;
+                        }
+                    }
+                });
+
+                iaThread.start();
+                barra.start();
+
+                try {
+                    iaThread.join(); // Espera IA
+                    barra.join();    // Espera barra
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+                // Mostrar mensaje al terminar todo
+                interfaz.mostrarMensaje("IA: " + respuestaIA[0]);
+                progressBar.setValue(0);
+                btn7.setEnabled(true);
+                btn8.setEnabled(true);
+            });
+
+            hiloIA.start();
+        });
+
+        // Botón Categoría IA
+        btn8 = new JButton("Sugerir Categoria");
+        btn8.setBounds(185, 30, 180, 50);
+        btn8.addActionListener(e -> {
+            String nombre = interfaz.pedirNombre();
+            if (nombre == null || nombre.trim().isEmpty()) return;
+
+            btn7.setEnabled(false);
+            btn8.setEnabled(false);
+
+            Thread hiloIA = new Thread(() -> {
+                final String[] respuestaIA = new String[1];
+
+                Thread iaThread = new Thread(() -> {
+                    respuestaIA[0] = productoC.generarCategoriaIAyRetornar(nombre); // nuevo método
+                });
+
+                Thread barra = new Thread(() -> {
+                    for (int i = 0; i <= 100; i++) {
+                        progressBar.setValue(i);
+                        try {
+                            Thread.sleep(30);
+                        } catch (InterruptedException ex) {
+                            return;
+                        }
+                    }
+                });
+
+                iaThread.start();
+                barra.start();
+
+                try {
+                    iaThread.join();
+                    barra.join();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+                interfaz.mostrarMensaje("IA: " + respuestaIA[0]);
+                progressBar.setValue(0);
+                btn7.setEnabled(true);
+                btn8.setEnabled(true);
+            });
+
+            hiloIA.start();
+        });
+
+        // Botón Volver
+        btnvolver = new JButton("Volver");
+        btnvolver.setBounds(90, 90, 180, 50);
+        btnvolver.addActionListener(e -> pIa.setVisible(false));
+
+        pIa.add(btn7);
+        pIa.add(btn8);
+        pIa.add(btnvolver);
+
+        pIa.setVisible(true);
+    }
+
+
 }
