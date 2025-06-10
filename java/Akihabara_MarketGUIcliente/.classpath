@@ -6,12 +6,12 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/programacion/JARS JAVA/mysql-connector-j-9.3.0.jar">
+	<classpathentry kind="lib" path="C:/programacion/java/Akihabara_MarketGUIcliente/Jars/flatlaf-3.6.jar"/>
+	<classpathentry kind="lib" path="C:/programacion/java/Akihabara_MarketGUIcliente/Jars/gson-2.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/programacion/java/Akihabara_MarketGUIcliente/Jars/mysql-connector-j-9.3.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/programacion/JARS JAVA/gson-2.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/programacion/JARS JAVA/flatlaf-3.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
