@@ -99,6 +99,17 @@ La gestión de productos se desglosa en:
    - Eliminar productos: Eliminar un producto de la base de datos dado su ID.
    - Buscar productos por nombre: Buscar productos que contengan un nombre específico.
 
+ - Gestión de clientes: El sistema permite gestionar los clientes del mercado Akihabara.
+La gestión de clientes se desglosa en:
+
+   - Agregar clientes: Insertar nuevos clientes en la base de datos.
+   - Buscar clientes por ID: Consultar los detalles de un clientes dado su ID.
+   - Listar todos los clientes: Mostrar todos los clientes almacenados.
+   - Actualizar clientes: Modificar detalles de un cliente ya existente.
+   - Eliminar clientes: Eliminar un cliente de la base de datos dado su ID.
+   - Buscar clientes por correo: Buscar clientes que contengan un correo específico.
+
+
  - Asistente IA: Integración con OpenRouter:
 Que a su vez se desglosa en:
 
@@ -107,9 +118,12 @@ Que a su vez se desglosa en:
 
 Estructura de clases:
 
-- Main.java: Punto de entrada de la aplicación. Llama al controlador y gestiona el inicio de la aplicación.
-- ProductoController.java: Controlador principal de la aplicación. Gestiona la interacción con el usuario (por consola o GUI).
-- ProductoDAO.java: Interfaz para la manipulación de datos de productos en la base de datos MySQL.
--ProductoOtaku.java: Modelo que representa los productos, con atributos como `id`, `nombre`, `categoría`, `precio`, y `stock`.
-- InterfazConsola.java: Clase para interactuar con el usuario mediante la consola.
-- LlmService.java: Clase que maneja la integración con la API de OpenRouter para la generación de descripciones y sugerencias de categoría..
+Main.java : Punto de entrada de la aplicación; inicia el controlador e inicializa la conexión a la base de datos.
+ProductoController.java : Controlador principal que gestiona la lógica de negocio y la interacción entre vistas, modelo y DAO de productos.
+ClienteController.java : Controlador encargado de la lógica de negocio relacionada con los clientes.
+ProductoDAO.java : Interfaz que define métodos para manipular datos de productos en la base de datos.
+ClienteDAO.java : Interfaz que define métodos para manipular datos de clientes en la base de datos.
+ProductoOtaku.java : Clase modelo que representa un producto con atributos como id, nombre, categoría, precio y stock.
+ClienteOtaku.java : Clase modelo que representa a un cliente con atributos como id, nombre, email, telefono, fecha de registro.
+InterfazConsola.java : Vista encargada de interactuar con el usuario a través de la consola (lectura y muestra de datos).
+LlmService.java : Servicio que conecta con la API de OpenRouter para generar descripciones y sugerencias de categoría.
