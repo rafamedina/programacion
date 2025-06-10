@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
 import Controller.ProductoController;
+import Controller.SetupDatos;
 import DAO.ProductoDAO;
 import View.InterfazProducto;
 
@@ -16,8 +17,10 @@ public class GUIProducto extends JFrame{
 	ProductoController productoC = new ProductoController(interfaz);
 	JProgressBar progressBar;
 	JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
+	ProductoDAO dao = new ProductoDAO();
 
     public void MenuProducto() {
+    	SetupDatos.cargarProductosIniciales(dao);
         setTitle("Productos");
         setSize(800, 800);
         setLocation(500, 100);
