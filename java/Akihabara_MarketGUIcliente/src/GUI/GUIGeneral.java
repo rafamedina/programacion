@@ -20,24 +20,24 @@ public class GUIGeneral extends JFrame {
 	public GUIGeneral() {
 		
 		 setTitle("AKIHABARA MARKET");
-	        setSize(400, 400);
+	        setSize(400, 300);
 	        setLocation(650, 250);
 	        setLayout(null); 
 	        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	        
 	        btn1 = new JButton("Menu Producto");
-	        btn1.setBounds(50, 50, 150, 50);
+	        btn1.setBounds(35, 50, 150, 50);
 	        btn1.addActionListener(e -> producto.MenuProducto());
 	        add(btn1);
 	        
 	        btn2 = new JButton("Menu Cliente");
-	        btn2.setBounds(250, 50, 150, 50);
+	        btn2.setBounds(220, 50, 150, 50);
 	        btn2.addActionListener(e -> cliente.MenuCliente());
 	        add(btn2);
 	        
 	        btnsalir = new JButton("Salir");
-	        btnsalir.setBounds(250, 150, 150, 50);
+	        btnsalir.setBounds(125, 150, 150, 50);
 	        btnsalir.addActionListener(e -> setVisible(false));
 	        add(btnsalir);
 	}

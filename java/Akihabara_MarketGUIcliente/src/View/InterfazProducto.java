@@ -1,6 +1,8 @@
 package View;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -13,7 +15,8 @@ Scanner scanner = new Scanner(System.in);
 
 JTextArea inputFieldsalida = new JTextArea();
 String datoRecogido = "";
-
+private JTable tablaProductos;
+private DefaultTableModel modeloTablaProductos;
 	
 	public Component createFieldSalida() {
 
@@ -22,11 +25,22 @@ String datoRecogido = "";
 		    inputFieldsalida.setLineWrap(true);  // Permitir que el texto se ajuste a las líneas
 
 		    JScrollPane scroll = new JScrollPane(inputFieldsalida);  // Añadir un JScrollPane para el desplazamiento
-		    scroll.setBounds(5, 250, 375, 180);  // Definir el tamaño y la ubicación
+		    scroll.setBounds(150, 515, 475, 180);  // Definir el tamaño y la ubicación
 
 		    return scroll;
 	}
-	
+	public JScrollPane crearTablaProductos() {
+	    modeloTablaProductos = new DefaultTableModel();
+	    modeloTablaProductos.setColumnIdentifiers(new String[]{"ID", "NOMBRE", "CATEGORIA", "PRECIO (€)", "STOCK"});
+
+	    tablaProductos = new JTable(modeloTablaProductos);
+	    tablaProductos.setEnabled(false); // Solo visualización
+
+	    JScrollPane scrollTabla = new JScrollPane(tablaProductos);
+	    scrollTabla.setBounds(25, 255, 730, 250);
+	    return scrollTabla;
+	}
+
 	 // Mostrar un mensaje en inputFieldsalida
     public void mostrarMensaje(String mensaje) {
         inputFieldsalida.setText(mensaje);  // Poner el mensaje en el campo de salida
@@ -140,30 +154,29 @@ String datoRecogido = "";
         return new ProductoOtaku(nombre, categoria, precio, stock);
     }
     public void mostrarProducto(ProductoOtaku producto) {
-        String mensaje = String.format("ID: %-5d | NOMBRE: %-25s | CATEGORIA: %-10s | PRECIO: %10.2f € | STOCK: %-5d\n",
-                producto.getId(),
-                producto.getNombre(),
-                producto.getCategoria(),
-                producto.getPrecio(),
-                producto.getStock());
-        mostrarMensaje(mensaje);  // Mostrar los detalles del producto en el JTextArea
+    	 modeloTablaProductos.setRowCount(0); // Limpiar tabla
+
+    	    modeloTablaProductos.addRow(new Object[]{
+    	        producto.getId(),
+    	        producto.getNombre(),
+    	        producto.getCategoria(),
+    	        String.format("%.2f", producto.getPrecio()) + " €",
+    	        producto.getStock()
+    	    });
     }
 
     public void mostrarProductos(List<ProductoOtaku> lista) {
-        StringBuilder mensaje = new StringBuilder(String.format("%-5s | %-25s | %-10s | %-10s | %-5s\n", 
-                                                              "ID", "NOMBRE", "CATEGORIA", "PRECIO", "STOCK"));
-        mensaje.append("----------------------------------------------------------------------\n");
+    	 modeloTablaProductos.setRowCount(0); // Limpiar tabla
 
-        for (ProductoOtaku producto : lista) {
-            mensaje.append(String.format("%-5d | %-25s | %-10s | %10.2f € | %-5d\n",
-                    producto.getId(),
-                    producto.getNombre(),
-                    producto.getCategoria(),
-                    producto.getPrecio(),
-                    producto.getStock()));
-        }
-
-        mostrarMensaje(mensaje.toString());  // Mostrar toda la lista de productos en el JTextArea
+    	    for (ProductoOtaku producto : lista) {
+    	        modeloTablaProductos.addRow(new Object[]{
+    	            producto.getId(),
+    	            producto.getNombre(),
+    	            producto.getCategoria(),
+    	            String.format("%.2f", producto.getPrecio()) + " €",
+    	            producto.getStock()
+    	        });
+    	    }
     }
 
     public String pedirEdicion() {

@@ -16,9 +16,9 @@ public class GUICliente extends JFrame {
 	JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btnIA, btnvolver, btnsalir ;
 	
 	public void  MenuCliente() {
-        setTitle("Akihabara_Market");
-        setSize(500, 700);
-        setLocation(650, 250);
+        setTitle("Akihabara Market Clientes");
+        setSize(800, 800);
+        setLocation(500, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         
@@ -31,16 +31,17 @@ public class GUICliente extends JFrame {
         add(btn6);
         add(btnsalir);
         
-      
+        
         Component salida = interfaz.crearCampoSalida();
-		
+        Component tabla = interfaz.crearTablaClientes();
+		add(tabla);
 	    add(salida);
 	    setVisible(true);
     }
 
     public void CrearBotones() {
         btn1 = new JButton("Insertar Cliente");
-        btn1.setBounds(5, 30, 180, 50);
+        btn1.setBounds(405, 30, 180, 50);
         btn1.addActionListener(e -> clienteC.gestionInsertarCliente());
 
         btn2 = new JButton("Buscar Cliente por ID");
@@ -48,7 +49,7 @@ public class GUICliente extends JFrame {
         btn2.addActionListener(e -> clienteC.gestionBuscarCliente());
 
         btn3 = new JButton("Todos los Cliente");
-        btn3.setBounds(5, 80, 180, 50);
+        btn3.setBounds(405, 80, 180, 50);
         btn3.addActionListener(e -> clienteC.gestionBuscarClientes());
 
         btn4 = new JButton("Editar un Cliente");
@@ -56,7 +57,7 @@ public class GUICliente extends JFrame {
         btn4.addActionListener(e -> clienteC.gestionActualizarCliente());
         
         btn5 = new JButton("Eliminar un Cliente");
-        btn5.setBounds(5, 130, 180, 50);
+        btn5.setBounds(405, 130, 180, 50);
         btn5.addActionListener(e -> clienteC.gestionEliminarCliente());
         
         btn6 = new JButton("Buscar por Correo");
@@ -64,7 +65,7 @@ public class GUICliente extends JFrame {
         btn6.addActionListener(e -> clienteC.gestionBuscarPorEmail());
              
         btnsalir = new JButton("Salir");
-        btnsalir.setBounds(90, 500, 180, 50);
+        btnsalir.setBounds(300, 675, 180, 50);
         btnsalir.addActionListener(e -> setVisible(false));
 
     }

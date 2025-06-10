@@ -1,6 +1,8 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.sql.Date;
 import java.text.ParseException;
@@ -11,18 +13,29 @@ import Model.ClienteOtaku;
 
 public class InterfazCliente extends JFrame {
     JTextArea campoSalida = new JTextArea();
-
+    private JTable tablaClientes;
+    private DefaultTableModel modeloTabla;
     public Component crearCampoSalida() {
         campoSalida.setEditable(false);
         campoSalida.setWrapStyleWord(true);
         campoSalida.setLineWrap(true);
 
         JScrollPane scroll = new JScrollPane(campoSalida);
-        scroll.setBounds(5, 250, 475, 180);
+        scroll.setBounds(150, 475, 475, 180);
 
         return scroll;
     }
+    public JScrollPane crearTablaClientes() {
+        modeloTabla = new DefaultTableModel();
+        modeloTabla.setColumnIdentifiers(new String[]{"ID", "NOMBRE", "EMAIL", "TELEFONO", "FECHA REGISTRO"});
 
+        tablaClientes = new JTable(modeloTabla);
+        tablaClientes.setEnabled(false); 
+
+        JScrollPane scrollTabla = new JScrollPane(tablaClientes);
+        scrollTabla.setBounds(25, 200, 730, 250);
+        return scrollTabla;
+    }
     public void mostrarMensaje(String mensaje) {
         campoSalida.setText(mensaje);
     }
@@ -110,35 +123,30 @@ public class InterfazCliente extends JFrame {
     }
 
     public void mostrarCliente(ClienteOtaku cliente) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fecha = sdf.format(cliente.getFecha_registro());
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        modeloTabla.setRowCount(0); // limpiar
+        modeloTabla.addRow(new Object[]{
+            cliente.getId(),
+            cliente.getNombre(),
+            cliente.getEmail(),
+            cliente.getTelefono(),
+            sdf.format(cliente.getFecha_registro())
+        });
+    }
 
-        String mensaje = String.format("ID: %d | NOMBRE: %-25s | EMAIL: %-20s | TELEFONO: %-15s | FECHA REGISTRO: %s",
+    public void mostrarClientes(List<ClienteOtaku> lista) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        modeloTabla.setRowCount(0);
+
+        for (ClienteOtaku cliente : lista) {
+            modeloTabla.addRow(new Object[]{
                 cliente.getId(),
                 cliente.getNombre(),
                 cliente.getEmail(),
                 cliente.getTelefono(),
-                fecha);
-        mostrarMensaje(mensaje);
-    }
-
-    public void mostrarClientes(List<ClienteOtaku> lista) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        StringBuilder mensaje = new StringBuilder(String.format("%-5s | %-25s | %-20s | %-15s | %-15s\n",
-                "ID", "NOMBRE", "EMAIL", "TELEFONO", "FECHA REGISTRO"));
-        mensaje.append("------------------------------------------------------------------------------------\n");
-
-        for (ClienteOtaku cliente : lista) {
-            String fecha = sdf.format(cliente.getFecha_registro());
-            mensaje.append(String.format("%-5d | %-25s | %-20s | %-15s | %-15s\n",
-                    cliente.getId(),
-                    cliente.getNombre(),
-                    cliente.getEmail(),
-                    cliente.getTelefono(),
-                    fecha));
+                sdf.format(cliente.getFecha_registro())
+            });
         }
-
-        mostrarMensaje(mensaje.toString());
     }
 
    

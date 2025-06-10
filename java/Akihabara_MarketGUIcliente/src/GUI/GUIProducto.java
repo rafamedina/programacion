@@ -19,8 +19,8 @@ public class GUIProducto extends JFrame{
 
     public void MenuProducto() {
         setTitle("Productos");
-        setSize(400, 700);
-        setLocation(650, 250);
+        setSize(800, 800);
+        setLocation(500, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         
@@ -36,7 +36,8 @@ public class GUIProducto extends JFrame{
         
       
         Component salida = interfaz.createFieldSalida();
-		
+        Component tabla = interfaz.crearTablaProductos();
+		add(tabla);
 	    add(salida);
 	    setVisible(true);
     }
@@ -45,7 +46,7 @@ public class GUIProducto extends JFrame{
 
     	
         btn1 = new JButton("Insertar Producto");
-        btn1.setBounds(5, 30, 180, 50);
+        btn1.setBounds(405, 30, 180, 50);
         btn1.addActionListener(e -> productoC.gestionInsertarCliente());
 
         btn2 = new JButton("Buscar Producto por ID");
@@ -53,7 +54,7 @@ public class GUIProducto extends JFrame{
         btn2.addActionListener(e -> productoC.gestionBuscarProducto());
 
         btn3 = new JButton("Todos los Productos");
-        btn3.setBounds(5, 80, 180, 50);
+        btn3.setBounds(405, 80, 180, 50);
         btn3.addActionListener(e -> productoC.gestionBuscarProductos());
 
         btn4 = new JButton("Editar un Producto");
@@ -61,7 +62,7 @@ public class GUIProducto extends JFrame{
         btn4.addActionListener(e -> productoC.gestionActualizarProducto());
         
         btn5 = new JButton("Eliminar un Producto");
-        btn5.setBounds(5, 130, 180, 50);
+        btn5.setBounds(405, 130, 180, 50);
         btn5.addActionListener(e -> productoC.gestionEliminarProducto());
         
         btn6 = new JButton("Buscar por Nombre");
@@ -69,11 +70,11 @@ public class GUIProducto extends JFrame{
         btn6.addActionListener(e -> productoC.gestionBuscarPorNombre());
         
         btnIA = new JButton("Menu IA");
-        btnIA.setBounds(90, 190, 180, 50);
+        btnIA.setBounds(290, 190, 180, 50);
         btnIA.addActionListener(e -> crearPanelIa());
         
         btnsalir = new JButton("Salir");
-        btnsalir.setBounds(90, 500, 180, 50);
+        btnsalir.setBounds(300, 700, 180, 50);
         btnsalir.addActionListener(e -> setVisible(false));
 
     }
@@ -82,7 +83,7 @@ public class GUIProducto extends JFrame{
         JFrame pIa = new JFrame();
         pIa.setTitle("Menu IA");
         pIa.setSize(400, 250);
-        pIa.setLocation(650, 250);
+        pIa.setLocation(700, 400);
         pIa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pIa.setLayout(null);
 

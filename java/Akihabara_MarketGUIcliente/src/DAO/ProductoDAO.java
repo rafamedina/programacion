@@ -23,7 +23,7 @@ public class ProductoDAO {
 				stmt.setDouble(3, producto.getPrecio());
 				stmt.setInt(4, producto.getStock());
 				stmt.executeUpdate();
-				System.out.println("Producto Agregado Correctamente");
+				
 				
 			}
 		} catch (SQLException e) {
