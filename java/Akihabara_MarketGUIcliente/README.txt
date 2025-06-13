@@ -1,6 +1,6 @@
 
 Guía del Desarrollador/Usuario
-1. Cómo configurar la base de datos MySQL
+1. Cómo configurar la base de datos MySQL (si se hace sin el ejecutable)
 
  Pasos para configurar la base de datos MySQL:
 
@@ -127,3 +127,8 @@ ProductoOtaku.java : Clase modelo que representa un producto con atributos como 
 ClienteOtaku.java : Clase modelo que representa a un cliente con atributos como id, nombre, email, telefono, fecha de registro.
 InterfazConsola.java : Vista encargada de interactuar con el usuario a través de la consola (lectura y muestra de datos).
 LlmService.java : Servicio que conecta con la API de OpenRouter para generar descripciones y sugerencias de categoría.
+
+
+
+Utilizar el Ejecutable:
+para utilizar el ejecutable asegúrate de tener tu archivo apiKey.dat en la misma carpeta que el .jar
